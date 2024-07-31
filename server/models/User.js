@@ -53,12 +53,12 @@ class User {
 
     async update(data) {
         for (const key of Object.keys(this)) {
-            if (key in data && key !== data.user_id) {
+            if (key in data && key !== "user_id") {
                 this[key] = data[key];
             }
         }
 
-        this.updated_at = new Date();
+        this.updated_at = new Date().toISOString;
 
         const response = await db.query(`UPDATE users
                                             SET username = $1,

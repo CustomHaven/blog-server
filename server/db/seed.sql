@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS blog_posts;
-DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS replies;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS blog_posts;
+DROP TABLE IF EXISTS users;
 
 
 CREATE TABLE users (
@@ -77,18 +77,51 @@ INSERT INTO blog_posts (blog_title, blog_content, user_id, created_at, updated_a
 -- comments
 INSERT INTO comments (comment, blog_id, user_id, created_at, updated_at) VALUES
 ('Great post! Very informative.', 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Interesting read, thanks for sharing!', 1, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I learned a lot from this article.', 1, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('Thanks for the tips, I will definitely try them out.', 2, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Very helpful advice!', 2, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('I appreciate the practical tips.', 2, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('I’ve always wanted to travel more. This is really helpful!', 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('This is exactly what I needed, thanks!', 3, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Budget travel tips are the best!', 3, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('Coding is indeed an art form. Nice article!', 4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('I love gardening, and these tips are great!', 5, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('I found this post very inspiring.', 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Great insights on coding.', 4, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+('I love gardening, and these tips are great!', 5, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('This is very useful for beginners.', 5, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Can’t wait to start my own garden!', 5, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 -- replies
 INSERT INTO replies (reply_message, previous_reply_id, comment_id, user_id, blog_id, created_at, updated_at) VALUES
 ('I agree, the tips are fantastic!', NULL, 1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Very true, learned a lot.', NULL, 1, 5, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Great discussion here!', NULL, 1, 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('I’m glad you found it helpful!', NULL, 2, 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Happy to help!', NULL, 2, 4, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Thanks for the support!', NULL, 2, 5, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('Traveling is a lot of fun, isn’t it?', NULL, 3, 3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Absolutely, can’t wait for my next trip.', NULL, 3, 4, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Travel is life!', NULL, 3, 5, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('Absolutely! The creativity involved is amazing.', NULL, 4, 4, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Totally agree with you!', NULL, 4, 2, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Coding is both art and science.', NULL, 4, 3, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('Thanks! Gardening has been a passion of mine for years.', NULL, 5, 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Gardening is so rewarding!', NULL, 5, 1, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Love the tips shared here.', NULL, 5, 3, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
 ('That’s a great addition to the article.', 1, 1, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('I appreciate the feedback!', 2, 2, 3, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('Couldn’t agree more!', 1, 1, 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Excellent point!', 2, 2, 4, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Very well said!', 2, 2, 5, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Nicely put!', 3, 3, 1, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Totally on point!', 3, 3, 2, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
