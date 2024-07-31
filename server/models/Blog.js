@@ -3,7 +3,6 @@ const Comment = require("./Comment");
 
 class Blog {
     constructor(blog) {
-        console.log("REACGED")
         this.blog_id = blog.blog_id;
         this.blog_title = blog.blog_title;
         this.blog_content = blog.blog_content;
@@ -77,10 +76,6 @@ class Blog {
         return users.rows.map(b => new Blog(b))
     }
 
-    static async showAllById(id) {
-        const response = await db.query("SELECT * FROM blog_posts")
-    }
-
     static async show(id) {
         const response = await db.query("SELECT * FROM blog_posts WHERE blog_id = $1", [id]);
         if (response.rows.length !== 1) {
@@ -91,13 +86,14 @@ class Blog {
 
     static async create(data) {
         const { blog_title, blog_content, user_id, blog_id } = data;
-        if (!username || !email || !admin || !password ) {
+        if (!blog_title || !blog_content || !user_id ) {
             throw new Error("One of the required fields missing.");
         }
 
         const existingBlog = await db.query("SELECT * FROM blog_posts WHERE blog_id = $1", [blog_id]);
-        if (existingBlog.rows === 0) {
-            const response = await db.query(`INSERT INTO users (blog_title, blog_content, user_id) 
+
+        if (existingBlog.rows.length === 0) {
+            const response = await db.query(`INSERT INTO blog_posts (blog_title, blog_content, user_id) 
                 VALUES ($1, $2, $3) RETURNING *`, [blog_title, blog_content, user_id]);
             return new Blog(response.rows[0]);
         }
@@ -107,7 +103,7 @@ class Blog {
 
     async update(data) {
         for (const key of Object.keys(this)) {
-            if (key in data && key !== "blog_id") {
+            if (key in data && key !== "blog_id" && key !== "user_id") {
                 this[key] = data[key];
             }
         }
