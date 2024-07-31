@@ -26,6 +26,7 @@ class Reply {
                                             r1.blog_id AS r1_blog_id,
                                             r1.created_at AS r1_created_at,
                                             r1.updated_at AS r1_updated_at,
+
                                             r2.reply_id AS r2_reply_id,
                                             r2.reply_message AS r2_reply_message,
                                             r2.previous_reply_id AS r2_previous_reply_id,
@@ -40,10 +41,11 @@ class Reply {
                                             replies AS r2 
                                         ON r1.reply_id = r2.previous_reply_id
                                         WHERE
-                                            r1.reply_id = 1;`, [id]);
+                                            r1.reply_id = $1;`, [id]);
         
-        const r = response.rows;
 
+        const r = response.rows;
+        console.log("first", r)
         if (r.length === 0) {
             throw new Error("No reply found");
         }
@@ -57,8 +59,8 @@ class Reply {
             comment_id: r[0].r1_comment_id,
             user_id: r[0].r1_user_id,
             blog_id: r[0].r1_blog_id,
-            created_at: r[0].r1_created_at,
-            updated_at: r[0].r1_updated_at,
+            created_at: r[0].r1_created_at.toISOString(),
+            updated_at: r[0].r1_updated_at.toISOString(),
             replies: []
         };
 
@@ -71,8 +73,8 @@ class Reply {
                     comment_id: row.r2_comment_id,
                     user_id: row.r2_user_id,
                     blog_id: row.r2_blog_id,
-                    created_at: row.r2_created_at,
-                    updated_at: row.r2_updated_at
+                    created_at: row.r2_created_at.toISOString(),
+                    updated_at: row.r2_updated_at.toISOString()
                 });
             }
         });

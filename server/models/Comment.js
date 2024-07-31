@@ -83,8 +83,8 @@ class Comment {
                     comment_id: row.r_comment_id,
                     user_id: row.r_user_id,
                     blog_id: row.r_blog_id,
-                    created_at: row.r_created_at,
-                    updated_at: row.r_updated_at
+                    created_at: row.r_created_at.toISOString(),
+                    updated_at: row.r_updated_at.toISOString()
                 });
             }
         });
