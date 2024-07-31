@@ -34,7 +34,7 @@ class Blog {
 
         const existingBlog = await db.query("SELECT * FROM blog_posts WHERE blog_id = $1", [blog_id]);
         if (existingBlog.rows === 0) {
-            let response = await db.query(`INSERT INTO users (blog_title, blog_content, user_id) 
+            const response = await db.query(`INSERT INTO users (blog_title, blog_content, user_id) 
                 VALUES ($1, $2, $3) RETURNING *`, [blog_title, blog_content, user_id]);
             return new Blog(response.rows[0]);
         }
@@ -70,7 +70,7 @@ class Blog {
 
 
     async destroy() {
-        const response = await db.query("DELETE FROM blog_posts WHERE user = $1 RETURNING *;", [this.blog_id]);
+        const response = await db.query("DELETE FROM blog_posts WHERE blog_id = $1 RETURNING *;", [this.blog_id]);
         return new Blog(response.rows[0]);
     }
 

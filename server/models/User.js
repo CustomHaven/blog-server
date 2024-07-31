@@ -81,7 +81,7 @@ class User {
 
 
     async destroy() {
-        const response = await db.query("DELETE FROM users WHERE user = $1 RETURNING *;", [this.user_id]);
+        const response = await db.query("DELETE FROM users WHERE user_id = $1 RETURNING *;", [this.user_id]);
         return new User(response.rows[0]);
     }
 
