@@ -36,15 +36,32 @@ class User {
     }
 
     static async create(data) {
+        const { username, email, password } = data;
+        if (!username || !email || !password ) {
+            throw new Error("One of the required fields missing.");
+        }
+
+        const existingUser = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+        console.log("first", existingUser.rows)
+        if (existingUser.rows.length === 0) {
+            let response = await db.query(`INSERT INTO users (username, email, password) 
+                VALUES ($1, $2, $3) RETURNING *`, [username, email, password]);
+            return new User(response.rows[0]);
+        }
+        throw new Error("User already exist");
+    }
+
+    static async createAdmin(data) {
         const { username, email, admin, password } = data;
         if (!username || !email || !admin || !password ) {
             throw new Error("One of the required fields missing.");
         }
 
         const existingUser = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-        if (existingUser.rows === 0) {
-            let response = await db.query(`INSERT INTO users (username, email, admin, password) 
-                VALUES ($1, $2, $3, $4) RETURNING *`, [username, email, admin, password]);
+        console.log("first", existingUser.rows)
+        if (existingUser.rows.length === 0) {
+            let response = await db.query(`INSERT INTO users (username, email, password, admin) 
+                VALUES ($1, $2, $3, $4) RETURNING *`, [username, email, password, admin]);
             return new User(response.rows[0]);
         }
         throw new Error("User already exist");
@@ -58,7 +75,7 @@ class User {
             }
         }
 
-        this.updated_at = new Date().toISOString;
+        this.updated_at = new Date();
 
         const response = await db.query(`UPDATE users
                                             SET username = $1,
