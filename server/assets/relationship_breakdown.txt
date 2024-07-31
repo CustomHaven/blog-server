@@ -1,0 +1,42 @@
+Relationships Breakdown
+1. users to blog_posts
+Relationship: One-to-Many
+Details: A user (author) can create multiple blog posts. Each blog_posts entry references one user via user_id.
+Cardinality: One user can have many blog posts, but each blog post is created by one user.
+2. blog_posts to comments
+Relationship: One-to-Many
+Details: Each blog post can have multiple comments. Each comments entry references one blog_posts via blog_id.
+Cardinality: One blog post can have many comments, but each comment is associated with one blog post.
+3. users to comments
+Relationship: One-to-Many
+Details: Each user can make multiple comments. Each comments entry references one user via user_id.
+Cardinality: One user can make many comments, but each comment is made by one user.
+4. comments to replies
+Relationship: One-to-Many
+Details: Each comment can have multiple replies. Each replies entry references one comments entry via comment_id.
+Cardinality: One comment can have many replies, but each reply is in response to one comment.
+5. users to replies
+Relationship: One-to-Many
+Details: Each user can make multiple replies. Each replies entry references one user via user_id.
+Cardinality: One user can make many replies, but each reply is made by one user.
+6. blog_posts to replies
+Relationship: One-to-Many
+Details: Each blog post can have multiple replies. Each replies entry references one blog_posts entry via blog_id.
+Cardinality: One blog post can have many replies, but each reply is associated with one blog post.
+7. replies to replies (Self-Referencing)
+Relationship: One-to-Many (Self-referencing)
+Details: Each reply can be a reply to another reply. This is managed via previous_reply_id, which references reply_id in the same table.
+Cardinality: One reply can have many child replies (replies to it), but each reply can have only one parent reply.
+Summary of Relationships
+One-to-Many Relationships:
+
+users to blog_posts: One user can have many blog posts.
+blog_posts to comments: One blog post can have many comments.
+users to comments: One user can make many comments.
+comments to replies: One comment can have many replies.
+users to replies: One user can make many replies.
+blog_posts to replies: One blog post can have many replies.
+One-to-One Relationship:
+
+replies to replies (Self-Referencing): Each reply can have one parent reply, but each reply can also have multiple child replies (replies to it).
+These relationships define how entities (users, blog posts, comments, and replies) interact with each other in your database schema, ensuring data integrity and consistency.
