@@ -102,7 +102,19 @@ class Reply {
     }
 
 
+    static async createReplyToAReply(data, id) {
+        const { reply_message, comment_id, user_id, blog_id } = data;
 
+        const previousReply = await Reply.show(id);
+
+        if (!reply_message || !comment_id || !user_id || !blog_id ) {
+            throw new Error("One of the required fields missing.");
+        }
+
+        const response = await db.query(`INSERT INTO replies (reply_message, comment_id, user_id, blog_id, previous_reply_id) 
+            VALUES ($1, $2, $3, $4, $5) RETURNING *`, [reply_message, comment_id, user_id, blog_id, previousReply.reply_id]);
+        return new Reply(response.rows[0]);
+    }
 
 
     static async create(data) {
