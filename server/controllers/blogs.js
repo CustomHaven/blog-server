@@ -57,8 +57,8 @@ async function destroy(req, res) {
 async function showAssociation(req, res) {
     try {
         const id = req.params.id;
-        const country = await Blog.showBlogAssociateComments(id);
-        res.status(200).json(country);
+        const blog = await Blog.showBlogAssociateComments(id);
+        res.status(200).json(blog);
     } catch (error) {
         res.status(404).json({ error: error.message });
     }

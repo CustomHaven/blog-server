@@ -113,7 +113,7 @@ class Comment {
             }
         }
 
-        this.updated_at = new Date().toISOString();
+        this.updated_at = new Date();
 
         const response = await db.query(`UPDATE comments
                                             SET comment = $1,
