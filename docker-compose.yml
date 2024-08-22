@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  blog-mvc:
+    image: customhaven/blog_mvc:0.0.6.RELEASE
+    ports:
+      - "3000:3000"
+    depends_on:
+      - blog-db
+    restart: always
+    networks:
+      - blog-network
+  
+  blog-db:
+    image: customhaven/blog_db:0.0.3.RELEASE
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
