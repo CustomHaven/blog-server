@@ -13,8 +13,7 @@ app.use(express.json());
 app.use(logger);
 
 console.log("app js inside! NODE_ENV is?!", process.env.NODE_ENV);
-console.log("app js inside! BIG SECRET? is?!", process.env.JWT_SECRET);
-console.log("app js inside! from docker!! is?!", process.env.DOCKER_SECRET);
+console.log("app js inside! JWT BIG SECRET? is?!", process.env.JWT_SECRET);
 console.log("app js inside! CHECK_OUT_DOCKER_ENV FROM DOCKER!", process.env.CHECK_OUT_DOCKER_ENV);
 console.log("app js inside! CHECK_OUT_DOCKER_ENV FROM DOCKER! value = ", process.env.CHECK_OUT_DOCKER_ENV);
 console.log("app js inside! INNER_SECRET I from inside the app! value = ", process.env.INNER_SECRET);
