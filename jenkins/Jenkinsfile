@@ -5,7 +5,7 @@ pipeline {
 		nodeHome = tool "myNodeJS"
 		PATH = "$dockerHome/bin:$nodeHome/bin:$PATH"
     }
-    stages{
+    stages {
         stage("Checkout") {
             steps {
                 echo "Docker Home"
@@ -49,7 +49,6 @@ pipeline {
 				}
 			}
 		}
-    }
     }
     post {
 		always {
