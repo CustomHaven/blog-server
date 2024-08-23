@@ -30,21 +30,21 @@ pipeline {
         }
         stage("Build Docker Image") {
             steps {
-                withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE")]) {
+                withCredentials([file(credentialsId: "e6cf7ce9-1111-4113-9f25-f5a662674353", variable: "ENV_FILE")]) {
                     echo "Current directory before moving into blog_mvc"
                     sh "pwd"
-                    
+
                     dir("blog_mvc") {
                         echo "Current directory inside blog_mvc"
                         sh "pwd"
-        
+
                         script {
                             // Export environment variables from the .env file
                             sh """
                             set -a
                             . \$ENV_FILE
                             set +a
-                            
+
                             # Print the environment variables to verify
                             echo "PORT=\$PORT"
                             echo "NODE_ENV=\$NODE_ENV"
@@ -54,7 +54,7 @@ pipeline {
                             echo "DB_PASSWORD=\$DB_PASSWORD"
                             echo "DB_PORT=\$DB_PORT"
                             echo "JWT_SECRET=\$JWT_SECRET"
-        
+
                             # Build Docker image with environment variables
                             docker build \
                                 --build-arg PORT=\$PORT \
