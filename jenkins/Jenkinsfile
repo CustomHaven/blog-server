@@ -30,14 +30,20 @@ pipeline {
         }
         stage("Build Docker Image") {
             steps {
-                echo "check before the mvc"
-                sh "pwd"
-                echo "check mvc now"
-                dir("blog_mvc") {
-                    echo "current directory has to be blog"
+                withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE")]) {
+                    echo "check before the mvc"
                     sh "pwd"
-                    script {
-                        dockerImage = docker.build("customhaven/blog_mvc:${env.BUILD_TAG}")
+                    echo "check mvc now"
+                    dir("blog_mvc") {
+                        echo "current directory has to be blog"
+                        sh "pwd"
+                        script {
+                            sh """
+                            export \$(cat \$ENV_FILE | xargs)
+                            docker build -t customhaven/blog_mvc:${env.BUILD_TAG} .
+                            """
+                            dockerImage = docker.image("customhaven/blog_mvc:${env.BUILD_TAG}")
+                        }
                     }
                 }
             }
