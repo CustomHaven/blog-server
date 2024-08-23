@@ -33,7 +33,7 @@ pipeline {
                 echo "check before the mvc"
                 sh "pwd"
                 echo "check mvc now"
-                dir("../blog_mvc") {
+                dir("blog_mvc") {
                     echo "current directory has to be blog"
                     sh "pwd"
                     script {
