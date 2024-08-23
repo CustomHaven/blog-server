@@ -28,6 +28,28 @@ pipeline {
 				}
 			}
         }
+        stage("Build Docker Image") {
+            steps {
+                dir("../blog_mvc") {
+                    echo "current directory has to be blog"
+                    sh "pwd"
+                    script {
+                        dockerImage = docker.build("customhaven/blog_mvc:${env.BUILD_TAG}")
+                    }
+                }
+            }
+        }
+        stage("Push Docker Image") {
+			steps {
+				script {
+					docker.withRegistry("", "dockerhub") {
+						dockerImage.push()
+						dockerImage.push("${env.BUILD_TAG}")
+					}
+				}
+			}
+		}
+    }
     }
     post {
 		always {
