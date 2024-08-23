@@ -11,8 +11,8 @@ COPY controllers /app/controllers
 COPY routers /app/routers
 COPY db/connect.js /app/db/
 COPY models /app/models
-COPY .env /app/
 COPY *.js /app/
+COPY Dockerfile /app/
 COPY Dockerfile /app/
 EXPOSE 3000
 CMD ["npm", "start"]

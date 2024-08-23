@@ -30,7 +30,7 @@ pipeline {
         }
         stage("Build Docker Image") {
             steps {
-                withCredentials([file(credentialsId: "blog_mvc_env", variable: ".env")]) {
+                withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE")]) {
                     echo "check before the mvc"
                     sh "pwd"
                     echo "check mvc now"
@@ -40,7 +40,17 @@ pipeline {
                         script {
                             sh """
                             export \$(cat \$ENV_FILE | xargs)
-                            docker build -t customhaven/blog_mvc:${env.BUILD_TAG} .
+                            # Build Docker image with environment variables
+                            docker build \
+                                --build-arg PORT=\$PORT \
+                                --build-arg NODE_ENV=\$NODE_ENV \
+                                --build-arg DB_USER=\$DB_USER \
+                                --build-arg DB_HOST=\$DB_HOST \
+                                --build-arg DB_NAME=\$DB_NAME \
+                                --build-arg DB_PASSWORD=\$DB_PASSWORD \
+                                --build-arg DB_PORT=\$DB_PORT \
+                                --build-arg JWT_SECRET=\$JWT_SECRET \
+                                -t customhaven/blog_mvc:${env.BUILD_TAG} .
                             """
                             dockerImage = docker.image("customhaven/blog_mvc:${env.BUILD_TAG}")
                         }
