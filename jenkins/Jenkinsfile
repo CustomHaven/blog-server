@@ -119,17 +119,15 @@ pipeline {
                                 . \$ENV_FILE_DB
                                 set +a
 
-                                # Print the environment variables to verify
-                                echo "POSTGRES_DB=\$POSTGRES_DB"
-                                echo "POSTGRES_PASSWORD=\$POSTGRES_PASSWORD"
-
                                 # Build Docker image with environment variables
                                 docker build \
                                     --build-arg POSTGRES_DB=\$POSTGRES_DB \
                                     --build-arg POSTGRES_PASSWORD=\$POSTGRES_PASSWORD \
                                     -t customhaven/blog_db:${env.BUILD_TAG} .
                                 """
-                            dockerImageDB = docker.build("customhaven/blog_db:${env.BUILD_TAG}")
+                            // dockerImageDB = docker.build("customhaven/blog_db:${env.BUILD_TAG}")
+                            // Save the image tag to a variable for use in later stages
+                            env.DOCKER_IMAGE_DB = "customhaven/blog_db:${env.BUILD_TAG}"
                         }
                     }
                 }
@@ -139,8 +137,10 @@ pipeline {
             steps {
 				script {
 					docker.withRegistry("", "dockerhub") {
-						dockerImageDB.push()
-						dockerImageDB.push("${env.BUILD_TAG}")
+                        // using the env
+                        sh "docker push ${env.DOCKER_IMAGE_DB}"
+						// dockerImageDB.push()
+						// dockerImageDB.push("${env.BUILD_TAG}")
 					}
 				}
 			}
@@ -162,16 +162,6 @@ pipeline {
                             . \$ENV_FILE_MVC
                             set +a
 
-                            # Print the environment variables to verify
-                            echo "PORT=\$PORT"
-                            echo "NODE_ENV=\$NODE_ENV"
-                            echo "DB_USER=\$DB_USER"
-                            echo "DB_HOST=\$DB_HOST"
-                            echo "DB_NAME=\$DB_NAME"
-                            echo "DB_PASSWORD=\$DB_PASSWORD"
-                            echo "DB_PORT=\$DB_PORT"
-                            echo "JWT_SECRET=\$JWT_SECRET"
-
                             # Build Docker image with environment variables
                             docker build \
                                 --build-arg PORT=\$PORT \
@@ -184,7 +174,8 @@ pipeline {
                                 --build-arg JWT_SECRET=\$JWT_SECRET \
                                 -t customhaven/blog_mvc:${env.BUILD_TAG} .
                             """
-                            dockerImageMVC = docker.image("customhaven/blog_mvc:${env.BUILD_TAG}")
+                            env.DOCKER_IMAGE_MVC = "customhaven/blog_mvc:${env.BUILD_TAG}"
+                            // dockerImageMVC = docker.image("customhaven/blog_mvc:${env.BUILD_TAG}")
                         }
                     }
                 }
@@ -194,8 +185,9 @@ pipeline {
 			steps {
 				script {
 					docker.withRegistry("", "dockerhub") {
-						dockerImageMVC.push()
-						dockerImageMVC.push("${env.BUILD_TAG}")
+                        sh "docker push ${env.DOCKER_IMAGE_MVC}"
+						// dockerImageMVC.push()
+						// dockerImageMVC.push("${env.BUILD_TAG}")
 					}
 				}
 			}
