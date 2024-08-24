@@ -28,6 +28,12 @@ pipeline {
 				}
 			}
         }
+        stage("Test App") {
+            steps {
+                echo "We are going to test the app"
+                sh "npm run test"
+            }
+        }
         stage("Build Docker Image") {
             steps {
                 withCredentials([file(credentialsId: "e6cf7ce9-1111-4113-9f25-f5a662674353", variable: "ENV_FILE")]) {
@@ -39,7 +45,6 @@ pipeline {
                         sh "pwd"
 
                         script {
-                            // Export environment variables from the .env file
                             sh """
                             set -a
                             . \$ENV_FILE
