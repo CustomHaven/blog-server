@@ -42,7 +42,7 @@ class User {
         }
 
         const existingUser = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-        console.log("first", existingUser.rows)
+
         if (existingUser.rows.length === 0) {
             let response = await db.query(`INSERT INTO users (username, email, password) 
                 VALUES ($1, $2, $3) RETURNING *`, [username, email, password]);
@@ -58,7 +58,7 @@ class User {
         }
 
         const existingUser = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-        console.log("first", existingUser.rows)
+
         if (existingUser.rows.length === 0) {
             let response = await db.query(`INSERT INTO users (username, email, password, admin) 
                 VALUES ($1, $2, $3, $4) RETURNING *`, [username, email, password, admin]);

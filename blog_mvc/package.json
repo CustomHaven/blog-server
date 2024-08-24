@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll --verbose",
+    "pipeline-test": "jest --verbose > test.txt 2>&1",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "setup-db": "node db/setup.js"

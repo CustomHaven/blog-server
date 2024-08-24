@@ -1,7 +1,5 @@
 const { Pool } = require("pg");
 
-console.log("from docker", process.env.DOCKER_SECRET);
-console.log("NODE_ENV CHECK", process.env.NODE_ENV);
 
 const option = process.env.NODE_ENV === "test" ? {
     connectionString: process.env.DB_TEST_URL } : {
@@ -13,6 +11,6 @@ const option = process.env.NODE_ENV === "test" ? {
 };
 
 const db = new Pool(option);
-console.log("DB connection established.");
+
 
 module.exports = db;

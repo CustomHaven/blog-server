@@ -28,17 +28,24 @@ pipeline {
 				}
 			}
         }
-        // stage("Build App") {
-        //     dir("blog_mvc") {
-        //         sh "npm install"
-        //     }
-        // }
+        stage("Build App") {
+            dir("blog_mvc") {
+                sh "npm install"
+            }
+        }
         stage("Test App") {
             steps {
                 dir("blog_mvc") {
                     sh "ls"
-                    // Start the test process in the background
-                    sh './jenkins/scripts/test.sh'
+                    // Check if "FAIL" is in test.txt and fail the pipeline if it is
+                    // Run Jest tests and save output to test.txt
+                    sh "npm run pipeline-test"
+                    script {
+                        def testResult = sh(script: "grep 'FAIL' test.txt", returnStatus: true)
+                        if (testResult == 0) {
+                            error("Tests failed! Marking the pipeline as failed.")
+                        }
+                    }
                 }
             }
         }
@@ -102,9 +109,13 @@ pipeline {
 			echo "I always run"
 		}
 		success {
+            sh "rm test.txt"
+            sh "rm -rf node_modules"
 			echo "I run when successful"
 		}
 		failure {
+            sh "rm test.txt"
+            sh "rm -rf node_modules"
 			echo "I run when failed"
 		}
 	}
