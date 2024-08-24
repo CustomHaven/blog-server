@@ -14,6 +14,8 @@ pipeline {
                 sh "node --version"
                 echo "We have npm"
                 sh "npm --version"
+                echo "checking if terraform version is working"
+                sh "terraform --version"
                 echo "Path: $Path"
 				echo "Build Number: $env.BUILD_NUMBER"
 				echo "Build ID: $env.BUILD_ID"
