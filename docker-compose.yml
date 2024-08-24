@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   blog-mvc:
-    image: customhaven/blog_mvc:0.0.6.RELEASE
+    image: customhaven/blog_mvc:jenkins-jenkins-blog-pipeline-97
     ports:
       - "3000:3000"
     depends_on:
@@ -11,7 +11,7 @@ services:
       - blog-network
   
   blog-db:
-    image: customhaven/blog_db:0.0.3.RELEASE
+    image: customhaven/blog_db:jenkins-jenkins-blog-pipeline-97
     ports:
       - "5432:5432"
     restart: always
