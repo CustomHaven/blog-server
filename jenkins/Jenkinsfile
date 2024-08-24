@@ -214,6 +214,21 @@ pipeline {
                 }
             }
         }
+        stage("Terraform Plan") {
+            steps {
+                dir("terraform") {
+                    sh "terraform plan"
+                }
+            }
+        }
+        stage("Terraform Apply") {
+            steps {
+                echo "About to see if apply works"
+                dir("terraform") {
+                    sh "terraform apply"
+                }
+            }
+        }
     }
     post {
 		always {
