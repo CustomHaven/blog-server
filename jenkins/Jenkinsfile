@@ -174,20 +174,22 @@ pipeline {
                 sh "ls > ls.txt"
                 sh "cat ls.txt"
 
-                // Check if `test.txt` is listed in `ls.txt`
-                def testTxtExists = sh(script: "grep 'test.txt' ls.txt", returnStatus: true) == 0
-                if (testTxtExists) {
-                    // Run this script if `test.txt` is found in `ls.txt`
-                    sh "cat test.txt"
-                    sh "rm test.txt"
-                }
+                script {
+                    // Check if `test.txt` is listed in `ls.txt`
+                    def testTxtExists = sh(script: "grep 'test.txt' ls.txt", returnStatus: true) == 0
+                    if (testTxtExists) {
+                        // Run this script if `test.txt` is found in `ls.txt`
+                        sh "cat test.txt"
+                        sh "rm test.txt"
+                    }
 
-                // Check if `coverage.txt` or `coverage` is listed in `ls.txt`
-                def coverageFilesExist = sh(script: "grep -E 'coverage.txt|coverage' ls.txt", returnStatus: true) == 0
-                if (coverageFilesExist) {
-                    // Run these commands if `coverage.txt` or `coverage` is found in `ls.txt`
-                    sh "rm coverage.txt"
-                    sh "rm -rf coverage"
+                    // Check if `coverage.txt` or `coverage` is listed in `ls.txt`
+                    def coverageFilesExist = sh(script: "grep -E 'coverage.txt|coverage' ls.txt", returnStatus: true) == 0
+                    if (coverageFilesExist) {
+                        // Run these commands if `coverage.txt` or `coverage` is found in `ls.txt`
+                        sh "rm coverage.txt"
+                        sh "rm -rf coverage"
+                    }
                 }
                 sh "ls"
                 sh "rm ls.txt"
