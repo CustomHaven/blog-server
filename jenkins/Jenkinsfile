@@ -44,7 +44,7 @@ pipeline {
                     sleep 10 // Adjust this time based on your needs
 
                     // Read the process ID and send the SIGINT signal
-                    sh "kill -SIGINT \$(cat test_pid.txt)"
+                    sh "kill -2 \$(cat test_pid.txt)"
 
                     // Clean up
                     sh "rm test_pid.txt"
