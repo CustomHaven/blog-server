@@ -109,15 +109,15 @@ pipeline {
                 }
             }
         }
-        stage("Build Docker DB Image") {
-            steps {
-                dir("blog_db") {
-                    script {
-                        dockerDBImage = docker.build("customhaven/blog_db:${env.BUILD_TAG}")
-                    }
-                }
-            }
-        }
+        // stage("Build Docker DB Image") {
+        //     steps {
+        //         dir("blog_db") {
+        //             script {
+        //                 dockerDBImage = docker.build("customhaven/blog_db:${env.BUILD_TAG}")
+        //             }
+        //         }
+        //     }
+        // }
         stage("Build Docker MVC Image") {
             steps {
                 withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE")]) {
