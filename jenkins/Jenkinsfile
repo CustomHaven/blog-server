@@ -28,15 +28,26 @@ pipeline {
 				}
 			}
         }
+    stages {
         stage('Test Email') {
             steps {
                 script {
-                    mail to: 'your-email@gmail.com',
-                        subject: 'Test Email from Jenkins',
-                        body: 'This is a test email to check Jenkins email configuration.'
+                    withCredentials([usernamePassword(credentialsId: 'e47030c6-b9aa-4279-8df1-5ebe235f9865', usernameVariable: 'EMAIL_USER', passwordVariable: 'EMAIL_PASS')]) {
+                        mail to: 'your-email@gmail.com',
+                            subject: 'Test Email from Jenkins',
+                            body: 'This is a test email to check Jenkins email configuration.',
+                            mimeType: 'text/plain',
+                            from: "${EMAIL_USER}",
+                            smtpServer: 'smtp.gmail.com',
+                            smtpPort: 587,
+                            useTls: true,
+                            username: "${EMAIL_USER}",
+                            password: "${EMAIL_PASS}"
+                    }
                 }
             }
         }
+    }
         stage("Build App") {
             steps {
                 dir("blog_mvc") {
