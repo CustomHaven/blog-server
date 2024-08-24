@@ -115,8 +115,11 @@ pipeline {
 			echo "I always run"
 		}
 		success {
-            sh "rm test.txt"
-            sh "rm -rf node_modules"
+            dir("blog_mvc") {
+                sh "cat test.txt"
+                sh "rm test.txt"
+                sh "rm -rf node_modules"
+            }
 			echo "I run when successful"
 		}
 		failure {
