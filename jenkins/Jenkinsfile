@@ -51,18 +51,13 @@ pipeline {
         stage("Verify AWS Credentials") {
             steps {
                 withCredentials([[
-                    $class: 'StringBinding',
-                    credentialsId: 'AWS_Credentials_ID',
-                    variable: 'AWS_ACCESS_KEY_ID'
-                ], [
-                    $class: 'StringBinding',
-                    credentialsId: 'AWS_Credentials_ID',
-                    variable: 'AWS_SECRET_ACCESS_KEY'
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'AWS_Credentials_ID'
                 ]]) {
                     sh '''
                         # Print AWS CLI version to confirm installation
                         aws --version
-
+                        
                         # Set AWS environment variables manually
                         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
