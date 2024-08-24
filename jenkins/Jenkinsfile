@@ -47,6 +47,24 @@ pipeline {
 				}
 			}
         }
+        stage("Check credentials") {
+            withCredentials([awsCredentials(credentialsId: "AWS_Credentials", accessKeyVariable: "AWS_ACCESS_KEY_ID", secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
+                
+                // Avoid printing sensitive data directly
+                echo "AWS_ACCESS_KEY_ID is set"
+                // Be cautious, only print non-sensitive data
+                sh """
+                    echo 'AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
+                    echo 'AWS_ACCESS_KEY_ID is not printed for security reasons.'
+                """
+                
+                echo "AWS_SECRET_ACCESS_KEY turn"
+                sh """
+                    echo 'AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
+                    echo 'AWS_SECRET_ACCESS_KEY is not printed for security reasons.'
+                """
+            }
+        }
         stage("Build App") {
             steps {
                 dir("blog_mvc") {
