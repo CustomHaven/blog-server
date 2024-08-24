@@ -200,7 +200,7 @@ pipeline {
                         to: "havendepot@gmail.com",
                         subject: "Jenkins Pipeline Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                         body: "The Jenkins pipeline has failed. Please check the build logs for details: ${env.BUILD_URL}",
-                        from: "${EMAIL_USER}",
+                        from: "Jenkins Pipeline ${EMAIL_USER}",
                         // mimeType: "text/plain"
                     )
                 }
