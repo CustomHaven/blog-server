@@ -159,38 +159,26 @@ pipeline {
     post {
 		always {
 			echo "I always run"
-		}
-		success {
-            dir("blog_mvc") {
-                sh "ls"
-                sh "cat test.txt"
-                sh "rm test.txt"
-                sh "rm -rf node_modules"
-                sh "rm coverage.txt"
-                sh "rm -rf coverage"
-                sh "ls"
-            }
-			echo "I run when successful"
-		}
-		failure {
             dir("blog_mvc") {
                 sh "rm -rf node_modules"
                 sh "ls > ls.txt"
-                sh "cat ls.txt" // apperentlt there are no coverage or coverage.txt files!
+                sh "cat ls.txt"
 
                 script {
-                    // Check if `test.txt` is listed in `ls.txt`
                     def testTxtExists = sh(script: "grep 'test.txt' ls.txt", returnStatus: true) == 0
                     if (testTxtExists) {
-                        // Run this script if `test.txt` is found in `ls.txt`
                         sh "cat test.txt"
                         sh "rm test.txt"
                     }
 
 
-                    def coverageFilesExist = sh(script: "grep -E 'coverage.txt|coverage' ls.txt", returnStatus: true) == 0
+                    def coverageFileExist = sh(script: "grep 'coverage.txt' ls.txt", returnStatus: true) == 0
                     if (coverageFilesExist) {
                         sh "rm coverage.txt"
+                    }
+
+                    def coverageExist = sh(script: "grep" "coverage" "ls.txt", returnStatus: true) == 0
+                    if (coverageExist) {
                         sh "rm -rf coverage"
                     }
                 }
@@ -198,6 +186,11 @@ pipeline {
                 sh "rm ls.txt"
                 sh "ls"
             }
+		}
+		success {
+			echo "I run when successful"
+		}
+		failure {
 			echo "I run when failed"
 		}
 	}
