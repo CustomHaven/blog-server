@@ -39,8 +39,9 @@ pipeline {
             steps {
                 dir("blog_mvc") {
                     sh "ls"
-                    // Check if "FAIL" is in test.txt and fail the pipeline if it is
-                    // Run Jest tests and save output to test.txt
+                    echo "Checking NPM version"
+                    sh "npm --version"
+                    echo "starting the testing"
                     sh "npm run pipeline-test"
                     sh "ls"
                     sh "cat test.txt"
@@ -121,6 +122,7 @@ pipeline {
 		failure {
             // steps {
             dir("blog_mvc") {
+                cat "test.txt"
                 sh "rm test.txt"
                 sh "rm -rf node_modules"
                 sh "ls"
