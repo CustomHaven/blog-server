@@ -216,6 +216,7 @@ pipeline {
         }
         stage("Terraform Plan") {
             steps {
+                echo "Looking if plan wille execute"
                 dir("terraform") {
                     sh "terraform plan"
                 }
