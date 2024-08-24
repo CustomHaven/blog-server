@@ -109,18 +109,45 @@ pipeline {
                 }
             }
         }
-        // stage("Build Docker DB Image") {
-        //     steps {
-        //         dir("blog_db") {
-        //             script {
-        //                 dockerDBImage = docker.build("customhaven/blog_db:${env.BUILD_TAG}")
-        //             }
-        //         }
-        //     }
-        // }
+        stage("Build Docker DB Image") {
+            steps {
+                withCredentials([file(credentialsId: "blog_db_env", variable: "ENV_FILE_DB")]) {
+                    dir("blog_db") {
+                        script {
+                                sh """
+                                set -a
+                                . \$ENV_FILE_DB
+                                set +a
+
+                                # Print the environment variables to verify
+                                echo "POSTGRES_DB=\$POSTGRES_DB"
+                                echo "POSTGRES_PASSWORD=\$POSTGRES_PASSWORD"
+
+                                # Build Docker image with environment variables
+                                docker build \
+                                    --build-arg POSTGRES_DB=\$POSTGRES_DB \
+                                    --build-arg POSTGRES_PASSWORD=\$POSTGRES_PASSWORD \
+                                    -t customhaven/blog_db:${env.BUILD_TAG} .
+                                """
+                            dockerImageDB = docker.build("customhaven/blog_db:${env.BUILD_TAG}")
+                        }
+                    }
+                }
+            }
+        }
+        stage("Push Docker DB Image") {
+            steps {
+				script {
+					docker.withRegistry("", "dockerhub") {
+						dockerImageDB.push()
+						dockerImageDB.push("${env.BUILD_TAG}")
+					}
+				}
+			}
+        }
         stage("Build Docker MVC Image") {
             steps {
-                withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE")]) {
+                withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE_MVC")]) {
                     echo "Current directory before moving into blog_mvc"
                     sh "pwd"
 
@@ -128,14 +155,11 @@ pipeline {
                         echo "Current directory inside blog_mvc"
                         sh "pwd"
                         sh "ls"
-                        sh "rm coverage.txt"
-                        sh "rm -rf coverage"
-                        sh "ls"
 
                         script {
                             sh """
                             set -a
-                            . \$ENV_FILE
+                            . \$ENV_FILE_MVC
                             set +a
 
                             # Print the environment variables to verify
@@ -160,7 +184,7 @@ pipeline {
                                 --build-arg JWT_SECRET=\$JWT_SECRET \
                                 -t customhaven/blog_mvc:${env.BUILD_TAG} .
                             """
-                            dockerImage = docker.image("customhaven/blog_mvc:${env.BUILD_TAG}")
+                            dockerImageMVC = docker.image("customhaven/blog_mvc:${env.BUILD_TAG}")
                         }
                     }
                 }
@@ -170,8 +194,8 @@ pipeline {
 			steps {
 				script {
 					docker.withRegistry("", "dockerhub") {
-						dockerImage.push()
-						dockerImage.push("${env.BUILD_TAG}")
+						dockerImageMVC.push()
+						dockerImageMVC.push("${env.BUILD_TAG}")
 					}
 				}
 			}
