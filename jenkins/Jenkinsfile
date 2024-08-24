@@ -48,26 +48,6 @@ pipeline {
 				}
 			}
         }
-        stage("Verify AWS Credentials") {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS_Credentials_ID'
-                ]]) {
-                    sh '''
-                        # Print AWS CLI version to confirm installation
-                        aws --version
-                        
-                        # Set AWS environment variables manually
-                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                        
-                        # Test AWS credentials with sts get-caller-identity
-                        echo "Testing AWS credentials..."
-                    '''
-                }
-            }
-        }
         stage("Build App") {
             steps {
                 dir("blog_mvc") {
