@@ -116,8 +116,12 @@ pipeline {
 			echo "I run when successful"
 		}
 		failure {
-            sh "rm test.txt"
-            sh "rm -rf node_modules"
+            steps {
+                dir("blog_mvc") {
+                    sh "rm test.txt"
+                    sh "rm -rf node_modules"
+                }
+            }
 			echo "I run when failed"
 		}
 	}
