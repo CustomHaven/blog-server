@@ -16,6 +16,8 @@ pipeline {
                 sh "npm --version"
                 echo "checking if terraform version is working"
                 sh "terraform --version"
+                echo "Will kuberenetes WORK!?"
+                sh "kubectl version --client"
                 echo "Path: $Path"
 				echo "Build Number: $env.BUILD_NUMBER"
 				echo "Build ID: $env.BUILD_ID"
