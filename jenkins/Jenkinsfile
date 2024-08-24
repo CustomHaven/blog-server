@@ -83,6 +83,8 @@ pipeline {
                         }
                         
                         echo "Total Functions Coverage Percentage: ${funcsCoveragePercentage}%"
+
+                        sh "ls"
                         
                         // Convert to a number and check if it's below 60
                         def coverageValue = funcsCoveragePercentage.toFloat()
