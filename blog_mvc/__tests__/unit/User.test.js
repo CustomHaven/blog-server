@@ -44,7 +44,7 @@ describe("User Model", () => {
             const users = await User.getAll();
 
             // Assert
-            expect(User).toNotBeDefined();
+            expect(User).toBeDefined();
             expect(User.getAll).toBeDefined();
             expect(db.query).toHaveBeenCalledTimes(1);
             expect(users[2].user_id).toBe(3);
@@ -54,7 +54,7 @@ describe("User Model", () => {
         it("throws an error if no users are found", async () => {
             jest.spyOn(db, "query").mockResolvedValueOnce({ rows: [] });
 
-            await expect(User.getAll()).rejects.toThrow("No uers available")
+            await expect(User.getAll()).rejects.toThrow("No users available")
         })
     });
 })
