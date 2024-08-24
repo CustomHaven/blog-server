@@ -3,6 +3,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID = credentials("AWS_Credentials")
         AWS_SECRET_ACCESS_KEY = credentials("AWS_Credentials")
+        AWS_KEY_PAIR = credentials("AWS_PEM_ID")
         dockerHome = tool "myDocker"
 		nodeHome = tool "myNodeJS"
 		PATH = "$dockerHome/bin:$nodeHome/bin:$PATH"
@@ -220,7 +221,9 @@ pipeline {
             steps {
                 echo "Looking if plan wille execute"
                 dir("terraform") {
-                    sh "terraform plan"
+                    withCredentials([file(credentialsId: 'AWS_PEM_ID', variable: "AWS_KEY_PAIR")]) {
+                        sh 'terraform plan -var="aws_key_pair=$(cat $AWS_KEY_PAIR)"'
+                    }
                 }
             }
         }
