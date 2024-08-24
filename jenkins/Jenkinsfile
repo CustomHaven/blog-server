@@ -193,14 +193,14 @@ pipeline {
 			}
 		}
         stage("Terraform Init") {
-            sh "pwd"
-            sh """
-            pwd
-            cd ~/
-            pwd
-            ls
-            """
             steps {
+                sh "pwd"
+                sh """
+                pwd
+                cd ~/
+                pwd
+                ls
+                """
                 dir("terraform") {
                     sh "pwd"
                     sh "terraform init"
