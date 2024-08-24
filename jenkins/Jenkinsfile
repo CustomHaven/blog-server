@@ -28,24 +28,6 @@ pipeline {
 				}
 			}
         }
-        stage('Test Email') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'e47030c6-b9aa-4279-8df1-5ebe235f9865', usernameVariable: 'EMAIL_USER', passwordVariable: 'EMAIL_PASS')]) {
-                        emailext (
-                            to: 'your-email@gmail.com',
-                            subject: 'Test Email from Jenkins',
-                            body: 'This is a test email to check Jenkins email configuration.',
-                            from: "${EMAIL_USER}",
-                            // Add additional configuration as needed
-                            smtpServer: 'smtp.gmail.com',
-                            smtpPort: '587',
-                            useTls: true
-                        )
-                    }
-                }
-            }
-        }
         stage("Build App") {
             steps {
                 dir("blog_mvc") {
@@ -212,10 +194,20 @@ pipeline {
 		}
 		failure {
 			echo "I run when failed"
-            mail to: "trainingmomuse@gmail.com",
-                subject: "Jenkins Pipeline Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                body: "The Jenkins pipeline has failed. Please check the build logs for details: ${env.BUILD_URL}"
-
+            script {
+                withCredentials([usernamePassword(credentialsId: "e47030c6-b9aa-4279-8df1-5ebe235f9865", usernameVariable: "EMAIL_USER", passwordVariable: "EMAIL_PASS")]) {
+                    emailext (
+                        to: "havendepot@gmail.com",
+                        subject: "Test Email from Jenkins",
+                        body: "This is a test email to check Jenkins email configuration.",
+                        from: "${EMAIL_USER}",
+                        // Add additional configuration as needed
+                        smtpServer: "smtp.gmail.com",
+                        smtpPort: "587",
+                        useTls: true
+                    )
+                }
+            }
             // Example of sending a Slack notification
             // slackSend channel: '#builds', message: "Pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}. Check details: ${env.BUILD_URL}"
 		}
