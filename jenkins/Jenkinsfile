@@ -42,6 +42,9 @@ pipeline {
                     // Check if "FAIL" is in test.txt and fail the pipeline if it is
                     // Run Jest tests and save output to test.txt
                     sh "npm run pipeline-test"
+                    sh "ls"
+                    sh "cat test.txt"
+                    sh "ls"
                     script {
                         def testResult = sh(script: "grep 'FAIL' test.txt", returnStatus: true)
                         if (testResult == 0) {
