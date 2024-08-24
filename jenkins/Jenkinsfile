@@ -49,20 +49,22 @@ pipeline {
         }
         stage("Check credentials") {
             script {
+                // Use withCredentials to inject credentials into environment variables
                 withCredentials([awsCredentials(credentialsId: "AWS_Credentials", accessKeyVariable: "AWS_ACCESS_KEY_ID", secretKeyVariable: "AWS_SECRET_ACCESS_KEY")]) {
-                    
-                    // Avoid printing sensitive data directly
+
+                    // Log the presence of AWS_ACCESS_KEY_ID but avoid showing its value
                     echo "AWS_ACCESS_KEY_ID is set"
-                    // Be cautious, only print non-sensitive data
+
+                    // Print non-sensitive information
                     sh """
-                        echo 'AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID'
-                        echo 'AWS_ACCESS_KEY_ID is not printed for security reasons.'
+                        echo "$AWS_ACCESS_KEY_ID is present"
+                        echo "$AWS_SECRET_ACCESS_KEY is not printed for security reasons."
                     """
-                    
-                    echo "AWS_SECRET_ACCESS_KEY turn"
+
+                    // Avoid printing the actual value of AWS_SECRET_ACCESS_KEY
+                    echo "Checking AWS_SECRET_ACCESS_KEY presence"
                     sh """
-                        echo 'AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY'
-                        echo 'AWS_SECRET_ACCESS_KEY is not printed for security reasons.'
+                        echo "$AWS_SECRET_ACCESS_KEY is not printed for security reasons."
                     """
                 }
             }
