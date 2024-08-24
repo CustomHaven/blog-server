@@ -201,7 +201,7 @@ pipeline {
                         subject: "Jenkins Pipeline Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                         body: "The Jenkins pipeline has failed. Please check the build logs for details: ${env.BUILD_URL}",
                         from: "Jenkins Server Fail",
-                        // mimeType: "text/plain"
+                        mimeType: "text/plain"
                     )
                 }
             }
