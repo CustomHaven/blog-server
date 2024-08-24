@@ -41,7 +41,7 @@ pipeline {
                     sh "ls"
                     // Check if "FAIL" is in test.txt and fail the pipeline if it is
                     // Run Jest tests and save output to test.txt
-                    sh "npm run pipeline-test"
+                    sh "jest --coverage > test.txt 2>&1"
                     sh "ls"
                     sh "cat test.txt"
                     sh "ls"
