@@ -88,7 +88,7 @@ pipeline {
                         
                         // Convert to a number and check if it's below 60
                         def coverageValue = funcsCoveragePercentage.toFloat()
-                        if (coverageValue < 30) { // change to 60% when I build more tests
+                        if (coverageValue < 60) { // change to 60% when I build more tests
                             error("Functions coverage is below 60%. Failing the pipeline.")
                         } else {
                             echo "Functions coverage is sufficient. Proceeding with the pipeline."
@@ -176,7 +176,7 @@ pipeline {
             dir("blog_mvc") {
                 sh "rm -rf node_modules"
                 sh "ls > ls.txt"
-                sh "cat ls.txt"
+                sh "cat ls.txt" // apperentlt there are no coverage or coverage.txt files!
 
                 script {
                     // Check if `test.txt` is listed in `ls.txt`
@@ -187,10 +187,9 @@ pipeline {
                         sh "rm test.txt"
                     }
 
-                    // Check if `coverage.txt` or `coverage` is listed in `ls.txt`
+
                     def coverageFilesExist = sh(script: "grep -E 'coverage.txt|coverage' ls.txt", returnStatus: true) == 0
                     if (coverageFilesExist) {
-                        // Run these commands if `coverage.txt` or `coverage` is found in `ls.txt`
                         sh "rm coverage.txt"
                         sh "rm -rf coverage"
                     }
