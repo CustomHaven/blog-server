@@ -37,7 +37,17 @@ pipeline {
                     echo "Initating test"
                     sh "ls -a"
                     sh "npm install"
-                    sh "npm run test"
+                    // Start the test process in the background
+                    sh "npm run test & echo \$! > test_pid.txt"
+
+                    // Give the process some time to run before killing it
+                    sleep 10 // Adjust this time based on your needs
+
+                    // Read the process ID and send the SIGINT signal
+                    sh "kill -SIGINT \$(cat test_pid.txt)"
+
+                    // Clean up
+                    sh "rm test_pid.txt"
                 }
             }
         }
