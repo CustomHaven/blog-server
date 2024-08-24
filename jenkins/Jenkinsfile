@@ -55,6 +55,14 @@ pipeline {
                     credentialsId: 'AWS_Credentials_ID'
                 ]]) {
                     sh '''
+                        # Print environment variables for debugging
+                        echo "AWS_ACCESS_KEY_ID is set"
+                        echo "AWS_SECRET_ACCESS_KEY is set"
+
+                        # Print the aws version to confirm it's installed and accessible
+                        aws --version
+
+                        # Test AWS credentials with sts get-caller-identity
                         echo "Testing AWS credentials..."
                         aws sts get-caller-identity --region $AWS_REGION
                     '''
