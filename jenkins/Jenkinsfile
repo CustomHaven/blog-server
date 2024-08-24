@@ -4,6 +4,7 @@ pipeline {
         AWS_ACCESS_KEY_ID = credentials("AWS_Credentials_ID")
         AWS_SECRET_ACCESS_KEY = credentials("AWS_Credentials_ID")
         AWS_KEY_PAIR = credentials("AWS_PEM_ID")
+        AWS_REGION = "eu-west-2"
         dockerHome = tool "myDocker"
 		nodeHome = tool "myNodeJS"
 		PATH = "$dockerHome/bin:$nodeHome/bin:$PATH"
@@ -49,10 +50,15 @@ pipeline {
         }
         stage("Verify AWS Credentials") {
             steps {
-                sh """
-                    echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
-                    echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
-                """
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'AWS_Credentials_ID'
+                ]]) {
+                    sh '''
+                        echo "Testing AWS credentials..."
+                        aws sts get-caller-identity --region $AWS_REGION
+                    '''
+                }
             }
         }
         stage("Build App") {
