@@ -44,7 +44,7 @@ describe("User Model", () => {
             const users = await User.getAll();
 
             // Assert
-            expect(User).toBeNotDefined();
+            expect(User).toBeDefined();
             expect(User.getAll).toBeDefined();
             expect(db.query).toHaveBeenCalledTimes(1);
             expect(users[2].user_id).toBe(3);
