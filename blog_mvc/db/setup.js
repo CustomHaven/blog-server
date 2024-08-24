@@ -4,7 +4,7 @@ const path = require("path");
 
 const db = require("./connect");
 
-const pathJoin = path.join(__dirname + "/seed.sql");
+const pathJoin = path.join(__dirname + "../../blog_db/seed.sql");
 const sql = fs.readFileSync(pathJoin).toString();
 
 
