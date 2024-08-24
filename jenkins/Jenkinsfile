@@ -63,18 +63,29 @@ pipeline {
                     sh "ls"
                     sh "npm --version"
                     echo "Starting Coverage Test Result"
+                    
+                    // Run Jest with coverage and save output to coverage.txt
                     sh "npm run pipeline-coverage"
+                    
                     script {
                         // Extract the functions coverage percentage from coverage.txt
                         def funcsCoveragePercentage = sh(
-                            script: "grep 'All files' coverage.txt | awk '{print $5}' | tr -d '%'",
+                            script: """
+                                grep 'All files' coverage.txt | awk -F '|' '{print \$5}' | tr -d '%'
+                            """,
                             returnStdout: true
                         ).trim()
+                        
+                        // Check if the coverage percentage was extracted correctly
+                        if (funcsCoveragePercentage == "") {
+                            error("Failed to extract functions coverage percentage from coverage.txt")
+                        }
                         
                         echo "Total Functions Coverage Percentage: ${funcsCoveragePercentage}%"
                         
                         // Convert to a number and check if it's below 60
-                        if (funcsCoveragePercentage.toFloat() < 60) {
+                        def coverageValue = funcsCoveragePercentage.toFloat()
+                        if (coverageValue < 60) {
                             error("Functions coverage is below 60%. Failing the pipeline.")
                         } else {
                             echo "Functions coverage is sufficient. Proceeding with the pipeline."
@@ -147,6 +158,7 @@ pipeline {
                 sh "cat test.txt"
                 sh "rm test.txt"
                 sh "rm -rf node_modules"
+                sh "rm coverage.txt"
                 sh "ls"
             }
 			echo "I run when successful"
@@ -156,6 +168,7 @@ pipeline {
                 sh "cat test.txt"
                 sh "rm test.txt"
                 sh "rm -rf node_modules"
+                sh "rm coverage.txt"
                 sh "ls"
             }
 			echo "I run when failed"
