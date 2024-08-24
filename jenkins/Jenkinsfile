@@ -29,8 +29,10 @@ pipeline {
 			}
         }
         stage("Build App") {
-            dir("blog_mvc") {
-                sh "npm install"
+            steps {
+                dir("blog_mvc") {
+                    sh "npm install"
+                }
             }
         }
         stage("Test App") {
