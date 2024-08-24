@@ -46,10 +46,38 @@ pipeline {
                     sh "ls"
                     sh "cat test.txt"
                     sh "ls"
+                    // Not needed but we keep it incase
+                    // Because Jenkins will judge the entire pipeline if the test is Failure
                     script {
                         def testResult = sh(script: "grep 'FAIL' test.txt", returnStatus: true)
                         if (testResult == 0) {
                             error("Tests failed! Marking the pipeline as failed.")
+                        }
+                    }
+                }
+            }
+        }
+        stage("App Test Coverage") {
+            steps {
+                dir("blog_mvc") {
+                    sh "ls"
+                    sh "npm --version"
+                    echo "Starting Coverage Test Result"
+                    sh "npm run pipeline-coverage"
+                    script {
+                        // Extract the functions coverage percentage from coverage.txt
+                        def funcsCoveragePercentage = sh(
+                            script: "grep 'All files' coverage.txt | awk '{print $5}' | tr -d '%'",
+                            returnStdout: true
+                        ).trim()
+                        
+                        echo "Total Functions Coverage Percentage: ${funcsCoveragePercentage}%"
+                        
+                        // Convert to a number and check if it's below 60
+                        if (funcsCoveragePercentage.toFloat() < 60) {
+                            error("Functions coverage is below 60%. Failing the pipeline.")
+                        } else {
+                            echo "Functions coverage is sufficient. Proceeding with the pipeline."
                         }
                     }
                 }
@@ -119,18 +147,17 @@ pipeline {
                 sh "cat test.txt"
                 sh "rm test.txt"
                 sh "rm -rf node_modules"
+                sh "ls"
             }
 			echo "I run when successful"
 		}
 		failure {
-            // steps {
             dir("blog_mvc") {
                 sh "cat test.txt"
                 sh "rm test.txt"
                 sh "rm -rf node_modules"
                 sh "ls"
             }
-            // }
 			echo "I run when failed"
 		}
 	}
