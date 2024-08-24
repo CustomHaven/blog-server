@@ -159,6 +159,7 @@ pipeline {
 		}
 		success {
             dir("blog_mvc") {
+                sh "ls"
                 sh "cat test.txt"
                 sh "rm test.txt"
                 sh "rm -rf node_modules"
