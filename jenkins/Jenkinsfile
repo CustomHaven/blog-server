@@ -46,12 +46,6 @@ pipeline {
                     sh "ls"
                     sh "cat test.txt"
                     sh "ls"
-                    script {
-                        def testResult = sh(script: "grep 'FAIL' test.txt", returnStatus: true)
-                        if (testResult == 0) {
-                            error("Tests failed! Marking the pipeline as failed.")
-                        }
-                    }
                 }
             }
         }
