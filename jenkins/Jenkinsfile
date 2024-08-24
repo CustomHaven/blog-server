@@ -36,7 +36,7 @@ pipeline {
         stage("Test App") {
             steps {
                 dir("blog_mvc") {
-                    sh "ls -lh"
+                    sh "ls"
                     // Start the test process in the background
                     sh './jenkins/scripts/test.sh'
                 }
