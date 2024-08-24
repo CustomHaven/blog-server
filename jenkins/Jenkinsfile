@@ -28,26 +28,17 @@ pipeline {
 				}
 			}
         }
+        stage("Build App") {
+            dir("blog_mvc") {
+                sh "npm install"
+            }
+        }
         stage("Test App") {
             steps {
-                echo "We are going to test the app"
                 dir("blog_mvc") {
-                    echo "About to perform test"
-                    sh "pwd"
-                    echo "Initating test"
-                    sh "ls -a"
-                    sh "npm install"
+                    sh "ls -lh"
                     // Start the test process in the background
-                    sh "npm run test & echo \$! > test_pid.txt"
-
-                    // Give the process some time to run before killing it
-                    sleep 10 // Adjust this time based on your needs
-
-                    // Read the process ID and send the SIGINT signal
-                    sh "kill -2 \$(cat test_pid.txt)"
-
-                    // Clean up
-                    sh "rm test_pid.txt"
+                    sh './jenkins/scripts/test.sh'
                 }
             }
         }
