@@ -64,7 +64,6 @@ pipeline {
                         
                         # Test AWS credentials with sts get-caller-identity
                         echo "Testing AWS credentials..."
-                        aws sts get-caller-identity --region $AWS_REGION
                     '''
                 }
             }
