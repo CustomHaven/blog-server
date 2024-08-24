@@ -28,6 +28,15 @@ pipeline {
 				}
 			}
         }
+        stage('Test Email') {
+            steps {
+                script {
+                    mail to: 'your-email@gmail.com',
+                        subject: 'Test Email from Jenkins',
+                        body: 'This is a test email to check Jenkins email configuration.'
+                }
+            }
+        }
         stage("Build App") {
             steps {
                 dir("blog_mvc") {
@@ -203,3 +212,4 @@ pipeline {
 		}
 	}
 }
+
