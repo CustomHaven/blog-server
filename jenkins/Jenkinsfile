@@ -177,7 +177,7 @@ pipeline {
                         sh "rm coverage.txt"
                     }
 
-                    def coverageExist = sh(script: "grep" "coverage" "ls.txt", returnStatus: true) == 0
+                    def coverageExist = sh(script: "grep 'coverage' ls.txt", returnStatus: true) == 0
                     if (coverageExist) {
                         sh "rm -rf coverage"
                     }
