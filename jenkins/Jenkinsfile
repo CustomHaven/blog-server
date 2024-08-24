@@ -35,6 +35,7 @@ pipeline {
                     echo "About to perform test"
                     sh "pwd"
                     echo "Initating test"
+                    sh "ls -a"
                     sh "npm run test"
                 }
             }
