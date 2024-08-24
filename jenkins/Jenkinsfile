@@ -234,7 +234,10 @@ pipeline {
                 echo "Looking if plan wille execute"
                 dir("terraform") {
                     withCredentials([file(credentialsId: 'AWS_PEM_ID', variable: "AWS_KEY_PAIR")]) {
-                        sh 'terraform plan -var="aws_key_pair=$(cat $AWS_KEY_PAIR)"'
+                        sh '''
+                            # Run Terraform plan
+                            terraform plan -var="aws_key_pair=$(cat $AWS_KEY_PAIR)"
+                        '''
                     }
                 }
             }
