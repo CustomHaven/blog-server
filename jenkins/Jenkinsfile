@@ -159,6 +159,7 @@ pipeline {
     post {
 		always {
 			echo "I always run"
+            echo "Final Cleanups"
             dir("blog_mvc") {
                 sh "rm -rf node_modules"
                 sh "ls > ls.txt"
@@ -193,7 +194,12 @@ pipeline {
 		}
 		failure {
 			echo "I run when failed"
-            error("Pipeline Failed")
+            mail to: "trainingmomuse@gmail.com",
+                subject: "Jenkins Pipeline Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                body: "The Jenkins pipeline has failed. Please check the build logs for details: ${env.BUILD_URL}"
+
+            // Example of sending a Slack notification
+            // slackSend channel: '#builds', message: "Pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}. Check details: ${env.BUILD_URL}"
 		}
 	}
 }
