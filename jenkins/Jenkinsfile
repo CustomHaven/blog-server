@@ -28,7 +28,6 @@ pipeline {
 				}
 			}
         }
-    stages {
         stage('Test Email') {
             steps {
                 script {
@@ -47,7 +46,6 @@ pipeline {
                 }
             }
         }
-    }
         stage("Build App") {
             steps {
                 dir("blog_mvc") {
