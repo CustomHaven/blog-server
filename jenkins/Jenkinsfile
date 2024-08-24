@@ -66,7 +66,8 @@ pipeline {
                     
                     // Run Jest with coverage and save output to coverage.txt
                     sh "npm run pipeline-coverage"
-                    
+                    echo "check if coverage is added"
+                    sh "ls"
                     script {
                         // Extract the functions coverage percentage from coverage.txt
                         def funcsCoveragePercentage = sh(
