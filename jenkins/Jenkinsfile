@@ -51,17 +51,22 @@ pipeline {
         stage("Verify AWS Credentials") {
             steps {
                 withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'AWS_Credentials_ID'
+                    $class: 'StringBinding',
+                    credentialsId: 'AWS_Credentials_ID',
+                    variable: 'AWS_ACCESS_KEY_ID'
+                ], [
+                    $class: 'StringBinding',
+                    credentialsId: 'AWS_Credentials_ID',
+                    variable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                     sh '''
-                        # Print environment variables for debugging
-                        echo "AWS_ACCESS_KEY_ID is set"
-                        echo "AWS_SECRET_ACCESS_KEY is set"
-
-                        # Print the aws version to confirm it's installed and accessible
+                        # Print AWS CLI version to confirm installation
                         aws --version
 
+                        # Set AWS environment variables manually
+                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                        
                         # Test AWS credentials with sts get-caller-identity
                         echo "Testing AWS credentials..."
                         aws sts get-caller-identity --region $AWS_REGION
