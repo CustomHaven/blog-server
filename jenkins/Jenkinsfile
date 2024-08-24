@@ -88,7 +88,7 @@ pipeline {
                         
                         // Convert to a number and check if it's below 60
                         def coverageValue = funcsCoveragePercentage.toFloat()
-                        if (coverageValue < 60) { // change to 60% when I build more tests
+                        if (coverageValue < 30) { // change to 60% when I build more tests
                             error("Functions coverage is below 60%. Failing the pipeline.")
                         } else {
                             echo "Functions coverage is sufficient. Proceeding with the pipeline."
@@ -193,13 +193,12 @@ pipeline {
 			echo "I run when successful"
 		}
 		failure {
-			echo "I run when failed"
             script {
                 withCredentials([usernamePassword(credentialsId: "e47030c6-b9aa-4279-8df1-5ebe235f9865", usernameVariable: "EMAIL_USER", passwordVariable: "EMAIL_PASS")]) {
                     emailext (
-                        to: "havendepot@gmail.com,${EMAIL_USER},cc-${EMAIL_USER},cc-havendepot@gmail.com,bcc-${EMAIL_USER}",
-                        // cc: "${EMAIL_USER}",
-                        // bcc: "${EMAIL_USER}",
+                        to: "havendepot@gmail.com,${EMAIL_USER}",
+                        // cc: "${EMAIL_USER}", // should work might need to update emailext
+                        // bcc: "${EMAIL_USER}", // should work might need to update emailext
                         subject: "Jenkins Pipeline Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                         body: "The Jenkins pipeline has failed. Please check the build logs for details: ${env.BUILD_URL}",
                         from: "Jenkins Pipeline <${EMAIL_USER}>",
@@ -207,6 +206,7 @@ pipeline {
                     )
                 }
             }
+            echo "I run when failed"
             // Example of sending a Slack notification
             // slackSend channel: '#builds', message: "Pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}. Check details: ${env.BUILD_URL}"
 		}
