@@ -198,6 +198,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "e47030c6-b9aa-4279-8df1-5ebe235f9865", usernameVariable: "EMAIL_USER", passwordVariable: "EMAIL_PASS")]) {
                     emailext (
                         to: "havendepot@gmail.com,${EMAIL_USER}",
+                        cc: "${EMAIL_USER}",
+                        bcc: "${EMAIL_USER}"
                         subject: "Jenkins Pipeline Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                         body: "The Jenkins pipeline has failed. Please check the build logs for details: ${env.BUILD_URL}",
                         from: "Jenkins Pipeline <${EMAIL_USER}>",
