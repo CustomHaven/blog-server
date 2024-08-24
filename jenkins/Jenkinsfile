@@ -109,9 +109,18 @@ pipeline {
                 }
             }
         }
-        stage("Build Docker Image") {
+        stage("Build Docker DB Image") {
             steps {
-                withCredentials([file(credentialsId: "e6cf7ce9-1111-4113-9f25-f5a662674353", variable: "ENV_FILE")]) {
+                dir("blog_db") {
+                    script {
+                        dockerDBImage = docker.build("customhaven/blog_db:${env.BUILD_TAG}")
+                    }
+                }
+            }
+        }
+        stage("Build Docker MVC Image") {
+            steps {
+                withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE")]) {
                     echo "Current directory before moving into blog_mvc"
                     sh "pwd"
 
@@ -157,7 +166,7 @@ pipeline {
                 }
             }
         }
-        stage("Push Docker Image") {
+        stage("Push Docker MVC Image") {
 			steps {
 				script {
 					docker.withRegistry("", "dockerhub") {
