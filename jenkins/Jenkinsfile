@@ -243,9 +243,13 @@ pipeline {
                 echo "About to see if apply works"
                 dir("terraform") {
                     withCredentials([file(credentialsId: "AWS_PEM_ID", variable: "AWS_KEY_PAIR_FILE")]) {
-                        sh """
-                            terraform apply -var='aws_key_pair=${AWS_KEY_PAIR_FILE}'
-                        """
+                        sh '''
+                            # Ensure the private key file is available
+                            ls -l $AWS_KEY_PAIR_FILE
+
+                            # Run terraform plan with the private key
+                            terraform apply -var="aws_key_pair=${AWS_KEY_PAIR_FILE}"
+                        '''
                     }
                     sh "terraform apply"
                 }
