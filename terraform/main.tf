@@ -16,9 +16,9 @@ resource "aws_instance" "http_server" {
     key_name = "default-ec2"
     instance_type = "t2.micro"
     vpc_security_group_ids = [aws_security_group.http_server_sg.id]
-    # for_each = toset(data.aws_subnets.default_subnets.ids)
-    # subnet_id = each.value
-    subnet_id = data.aws_subnets.default_subnets.ids[0]
+    for_each = toset(data.aws_subnets.default_subnets.ids)
+    subnet_id = each.value
+    # subnet_id = data.aws_subnets.default_subnets.ids[0]
     connection {
         type = "ssh"
         host = self.public_ip
@@ -31,3 +31,5 @@ resource "aws_instance" "http_server" {
 output "dns_public_ips" {
     value = aws_instance.http_server[*].public_ip
 }
+
+# 13.40.43.201
