@@ -248,7 +248,7 @@ pipeline {
                             ls -l $AWS_KEY_PAIR_FILE
 
                             # Run terraform plan with the private key
-                            terraform apply -var="aws_key_pair=${AWS_KEY_PAIR_FILE}"
+                            terraform apply -var="aws_key_pair=${AWS_KEY_PAIR_FILE}" -auto-approve
                         '''
                     }
                 }
