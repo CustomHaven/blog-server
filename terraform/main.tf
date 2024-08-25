@@ -23,7 +23,7 @@ resource "aws_instance" "http_server" {
         type = "ssh"
         host = self.public_ip
         user = "ec2-user"
-        private_key = file(var.aws_key_pair)
+        private_key = var.aws_key_pair
     }
 }
 
