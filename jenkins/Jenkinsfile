@@ -251,7 +251,6 @@ pipeline {
                             terraform apply -var="aws_key_pair=${AWS_KEY_PAIR_FILE}"
                         '''
                     }
-                    sh "terraform apply"
                 }
             }
         }
