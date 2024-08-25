@@ -226,10 +226,13 @@ pipeline {
             steps {
                 echo "Looking if plan wille execute"
                 dir("terraform") {
-                    withCredentials([file(credentialsId: 'AWS_PEM_ID', variable: "AWS_KEY_PAIR")]) {
+                    withCredentials([file(credentialsId: 'AWS_PEM_ID', variable: "AWS_KEY_PAIR_FILE")]) {
                         sh '''
-                            # Run Terraform plan
-                            terraform plan -var="aws_key_pair=$(cat $AWS_KEY_PAIR)"
+                            # Ensure the private key file is available
+                            ls -l $AWS_KEY_PAIR_FILE
+
+                            # Run terraform plan with the private key
+                            terraform plan -var="aws_key_pair=${AWS_KEY_PAIR_FILE}"
                         '''
                     }
                 }
