@@ -73,18 +73,16 @@ pipeline {
                 expression { return params.RUN_DOCKER_DB }
             }
             steps {
-                script {
-                    echo "Looking if DB pipeline is there"
-                    sh """
-                        pwd
-                        ls
-                        cd blog_db
-                        ls
-                    """
-                    dir("blog_db") {
-                        script {
-                            load "Jenkinsfile-Blog-DB"
-                        }
+                echo "Looking if DB pipeline is there"
+                sh """
+                    pwd
+                    ls
+                    cd blog_db
+                    ls
+                """
+                dir("blog_db") {
+                    script {
+                        load "Jenkinsfile-Blog-DB"
                     }
                 }
             }
@@ -96,18 +94,16 @@ pipeline {
                 // expression { return params.PIPELINES_TO_RUN.contains("Docker_MVC") }
             }
             steps {
-                script {
-                    echo "Looking if MVC pipeline is there"
-                    sh """
-                        pwd
-                        ls
-                        cd blog_mvc
-                        ls
-                    """
-                    dir("blog_mvc") {
-                        script {
-                            load "Jenkinsfile-Blog-MVC"
-                        }
+                echo "Looking if MVC pipeline is there"
+                sh """
+                    pwd
+                    ls
+                    cd blog_mvc
+                    ls
+                """
+                dir("blog_mvc") {
+                    script {
+                        load "Jenkinsfile-Blog-MVC"
                     }
                 }
             }
