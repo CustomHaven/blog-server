@@ -63,7 +63,7 @@ pipeline {
         }
         stage("Docker DB Pipeline") {
             when {
-                expression { return params.PIPELINES_TO_RUN.contains('Docker_DB') }
+                expression { return params.PIPELINES_TO_RUN.contains("Docker_DB") }
             }
             steps {
                 script {
@@ -74,7 +74,7 @@ pipeline {
 
         stage("Docker MVC Pipeline") {
             when {
-                expression { return params.PIPELINES_TO_RUN.contains('Docker_MVC') }
+                expression { return params.PIPELINES_TO_RUN.contains("Docker_MVC") }
             }
             steps {
                 script {
