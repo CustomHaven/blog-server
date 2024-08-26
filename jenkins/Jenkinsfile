@@ -26,6 +26,12 @@ pipeline {
                     ls
                     ls -a
                 """
+                echo "looking in blog_db"
+                sh """
+                    ls
+                    cd blog_db
+                    ls
+                """
                 echo "AWS_SECRET_ACCESS_KEY is set"
                 sh "echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
                 echo "AWS_ACCESS_KEY_ID"
