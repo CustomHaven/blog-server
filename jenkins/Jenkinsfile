@@ -1,14 +1,14 @@
 pipeline {
     agent any
     parameters {
-        choice(name: 'PIPELINES_TO_RUN', choices: ['None', 'Docker_MVC', 'Docker_DB'], description: 'Select which pipeline to run')
+        choice(name: "PIPELINES_TO_RUN", choices: ["None", "Docker_MVC", "Docker_DB"], description: "Select which pipeline to run")
     }
     // parameters {
     //     activeChoiceReactiveParam("PIPELINES_TO_RUN") {
     //         description("Select the pipelines to run")
     //         choiceType("CHECKBOX") // This allows multiple selections
     //         groovyScript {
-    //             return ['Docker_MVC', 'Docker_DB']
+    //             return ["Docker_MVC", "Docker_DB"]
     //         }
     //     }
     // }
