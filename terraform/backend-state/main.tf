@@ -45,12 +45,12 @@ resource "aws_dynamodb_table" "organisation_backend_lock" {
     }
 }
 
-terraform {
-    backend "s3" {
-        bucket         = "s3-bucket-blog-mvc-customhaven"
-        key            = "terraform/state/terraform.tfstate"
-        region         = "eu-west-2"
-        dynamodb_table = "terraform-state-lock"
-        encrypt        = true
-    }
-}
+# terraform {
+#     backend "s3" {
+#         bucket         = "s3-bucket-blog-mvc-customhaven"
+#         key            = "terraform/state/terraform.tfstate"
+#         region         = "eu-west-2"
+#         dynamodb_table = "terraform-state-lock"
+#         encrypt        = true
+#     }
+# }
