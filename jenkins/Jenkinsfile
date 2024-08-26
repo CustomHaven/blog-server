@@ -75,7 +75,7 @@ pipeline {
                     echo "Conterising App Pipeline"
                     build job: "Blog-Build-App-Pipeline",
                         propagate: true,
-                        wait: false,
+                        // wait: true,
                         token: env.REMOTE_TRIGGER_TOKEN
                 }
             }
@@ -89,7 +89,7 @@ pipeline {
                     echo "Triggering Docker DB Pipeline"
                     build job: "Blog-DB-Microservice-Pipeline", 
                         propagate: true, 
-                        wait: false,  // Set to false to not wait for completion, remove if you need to wait
+                        // wait: true,  // Set to false to not wait for completion, remove if you need to wait
                         token: env.REMOTE_TRIGGER_TOKEN
 
                         // Use the following URL to trigger build remotely: JENKINS_URL/job/Docker-DB-Pipeline/build?token=TOKEN_NAME or /buildWithParameters?token=TOKEN_NAME
@@ -108,7 +108,7 @@ pipeline {
                     echo "Triggering Docker MVC Pipeline"
                     build job: "Blog-MVC-Microservice-Pipeline", 
                         propagate: true, 
-                        wait: false,  // Set to false to not wait for completion, remove if you need to wait
+                        // wait: true,  // Set to false to not wait for completion, remove if you need to wait
                         token: env.REMOTE_TRIGGER_TOKEN
 
                         // Use the following URL to trigger build remotely: JENKINS_URL/job/Docker-DB-Pipeline/build?token=TOKEN_NAME or /buildWithParameters?token=TOKEN_NAME
