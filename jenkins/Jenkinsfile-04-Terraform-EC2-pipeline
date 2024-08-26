@@ -7,6 +7,14 @@ pipeline {
         AWS_REGION = "eu-west-2"
     }
     stages {
+        stage("Setup Backend") {
+            steps {
+                dir("terraform/backend-state") {
+                    sh "terraform init"
+                    sh "terraform apply -auto-approve"
+                }
+            }
+        }
         stage("Terraform Init") {
             steps {
                 sh "pwd"
