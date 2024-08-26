@@ -39,7 +39,7 @@ resource "aws_instance" "http_server" {
 
 # We have 3 subnets accordingly I think there should be 3 public ips for each subnet dont I need to do a loop? for the output
 output "dns_public_ips" {
-    value = aws_instance.http_server[*].public_ip
+    value = [for instance in aws_instance.http_server : instance.public_ip]
 }
 
 # 13.40.43.201  
