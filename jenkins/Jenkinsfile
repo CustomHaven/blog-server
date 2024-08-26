@@ -11,12 +11,12 @@ pipeline {
 		PATH = "$dockerHome/bin:$nodeHome/bin:$groovyHome/bin:$PATH"
     }
     parameters {
-        activeChoiceReactiveParam('PIPELINES_TO_RUN') {
-            description('Select the pipelines to run')
-            choiceType('CHECKBOX') // This allows multiple selections
-            groovyScript {
-                return ['Docker_MVC', 'Docker_DB']
-            }
+        activeChoiceReactiveParam("PIPELINES_TO_RUN") {
+            description("Select the pipelines to run")
+            choiceType("CHECKBOX") // This allows multiple selections
+            // groovyScript {
+            //     return ['Docker_MVC', 'Docker_DB']
+            // }
         }
     }
     stages {
