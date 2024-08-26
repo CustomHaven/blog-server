@@ -10,8 +10,13 @@ pipeline {
 		PATH = "$dockerHome/bin:$nodeHome/bin:$PATH"
     }
     parameters {
-        booleanParam(name: "RUN_DOCKER_MVC", defaultValue: false, description: "Run Docker MVC Pipeline")
-        booleanParam(name: "RUN_DOCKER_DB", defaultValue: false, description: "Run Docker DB Pipeline")
+        activeChoiceReactiveParam('PIPELINES_TO_RUN') {
+            description('Select the pipelines to run')
+            choiceType('CHECKBOX') // This allows multiple selections
+            groovyScript {
+                return ['Docker_MVC', 'Docker_DB']
+            }
+        }
     }
     stages {
         stage("Checkout") {
@@ -123,7 +128,7 @@ pipeline {
         // }
         stage("Docker DB Pipeline") {
             when {
-                expression { return params.RUN_DOCKER_DB }
+                expression { return params.PIPELINES_TO_RUN.contains('Docker_DB') }
             }
             steps {
                 dir("blog_db") {
@@ -136,7 +141,7 @@ pipeline {
 
         stage("Docker MVC Pipeline") {
             when {
-                expression { return params.RUN_DOCKER_MVC }
+                expression { return params.PIPELINES_TO_RUN.contains('Docker_MVC') }
             }
             steps {
                 dir("blog_mvc") {
