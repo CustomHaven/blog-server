@@ -81,8 +81,10 @@ pipeline {
                         cd blog_db
                         ls
                     """
-                    evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_db/Jenkinsfile").text
-                    // load "blog_db/Jenkinsfile"
+                    echo "About to load the Jenkinsfile-Blog-DB"
+                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_db/Jenkinsfile").text
+                    load "blog_db/Jenkinsfile"
+                    echo "Finished loading the Jenkinsfile-Blog-DB"
                 }
             }
         }
@@ -103,8 +105,10 @@ pipeline {
                     """
                     // dir("blog_mvc") {
                         // script {
-                    evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_mvc/Jenkinsfile").text
-                    // load "blog_mvc/Jenkinsfile"
+                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_mvc/Jenkinsfile").text
+                    echo "About to load the Jenkinsfile-Blog-MVC"
+                    load "blog_mvc/Jenkinsfile"
+                    echo "Finished loading the Jenkinsfile-Blog-MVC"
                         // }
                     // }
                 }
