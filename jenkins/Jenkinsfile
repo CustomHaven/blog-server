@@ -75,15 +75,10 @@ pipeline {
             steps {
                 dir("blog_db") {
                     script {
-                        def dockerDBPipeline = runDockerDBPipeline()
-                        dockerDBPipeline() // Call the pipeline function
+                        echo "Triggering Docker DB Pipeline"
+                        build job: "Docker-DB-Pipeline"
                     }
                 }
-                
-                // script {
-                //     echo "Triggering Docker DB Pipeline"
-                //     build job: "Docker-DB-Pipeline"
-                // }
             }
         }
 
