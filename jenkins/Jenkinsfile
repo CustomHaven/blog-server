@@ -1,4 +1,4 @@
-node {
+pipeline {
     agent any
     parameters {
         booleanParam(name: 'RUN_DOCKER_MVC', defaultValue: false, description: 'Run Docker MVC Pipeline')
