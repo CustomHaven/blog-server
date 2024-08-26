@@ -1,6 +1,7 @@
 pipeline {
     agent any
     parameters {
+        booleanParam(name: "RUN_BUILD_APP", defaultValue: false, description: "Run Build APP Stage")
         booleanParam(name: "RUN_DOCKER_MVC", defaultValue: false, description: "Run Docker MVC Pipeline")
         booleanParam(name: "RUN_DOCKER_DB", defaultValue: false, description: "Run Docker DB Pipeline") // only run the job Docker-DB-Pipeline if this is pressed!
         booleanParam(name: "RUN_INFRASTRUCTURE", defaultValue: false, description: "Run Infrastructure")
@@ -71,6 +72,9 @@ pipeline {
 			}
         }
         stage("Build App") {
+            when {
+                expression { return params.RUN_BUILD_APP }
+            }
             steps {
                 script {
                     echo "Conterising App Pipeline"
