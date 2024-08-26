@@ -74,43 +74,24 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Looking if DB pipeline is there"
-                    sh """
-                        pwd
-                        ls
-                        cd blog_db
-                        ls
-                    """
-                    echo "About to load the Jenkinsfile-Blog-DB"
-                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_db/Jenkinsfile").text
-                    load "blog_db/Jenkinsfile"
-                    echo "Finished loading the Jenkinsfile-Blog-DB"
+                    def dbPipeline = load "blog_db/Jenkinsfile-Blog-DB.groovy"
+                    dbPipeline.buildDockerDbImage()
+                    dbPipeline.pushDockerDbImage()
                 }
             }
         }
-
         stage("Docker MVC Pipeline") {
             when {
                 expression { return params.RUN_DOCKER_MVC }
-                // expression { return params.PIPELINES_TO_RUN.contains("Docker_MVC") }
             }
             steps {
                 script {
-                    echo "Looking if MVC pipeline is there"
-                    sh """
-                        pwd
-                        ls
-                        cd blog_mvc
-                        ls
-                    """
-                    // dir("blog_mvc") {
-                        // script {
-                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_mvc/Jenkinsfile").text
-                    echo "About to load the Jenkinsfile-Blog-MVC"
-                    load "blog_mvc/Jenkinsfile"
-                    echo "Finished loading the Jenkinsfile-Blog-MVC"
-                        // }
-                    // }
+                    def mvcPipeline = load "blog_mvc/Jenkins-Blog-MVC.groovy"
+                    mvcPipeline.buildApp()
+                    mvcPipeline.testApp()
+                    mvcPipeline.appTestCoverage()
+                    mvcPipeline.buildDockerMvcImage()
+                    mvcPipeline.pushDockerMvcImage()
                 }
             }
         }
