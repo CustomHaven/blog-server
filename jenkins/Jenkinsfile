@@ -75,7 +75,7 @@ pipeline {
                 build job: "Blog-Build-App-Pipeline",
                     propagate: true,
                     wait: false,
-                    token: env.REMOTE_TRIGGER_TOKEN
+                    // token: env.REMOTE_TRIGGER_TOKEN
             }
         }
         stage("Run Docker DB Pipeline") {
