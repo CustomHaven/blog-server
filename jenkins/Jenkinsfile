@@ -1,8 +1,12 @@
 pipeline {
     agent any
     parameters {
-        choice(name: "PIPELINES_TO_RUN", choices: ["None", "Docker_MVC", "Docker_DB"], description: "Select which pipeline to run")
+        booleanParam(name: 'RUN_DOCKER_MVC', defaultValue: false, description: 'Run Docker MVC Pipeline')
+        booleanParam(name: 'RUN_DOCKER_DB', defaultValue: false, description: 'Run Docker DB Pipeline')
     }
+    // parameters {
+    //     choice(name: "PIPELINES_TO_RUN", choices: ["None", "Docker_MVC", "Docker_DB"], description: "Select which pipeline to run")
+    // }
     // parameters {
     //     activeChoiceReactiveParam("PIPELINES_TO_RUN") {
     //         description("Select the pipelines to run")
@@ -63,7 +67,8 @@ pipeline {
         }
         stage("Docker DB Pipeline") {
             when {
-                expression { return params.PIPELINES_TO_RUN.contains("Docker_DB") }
+                expression { return params.RUN_DOCKER_DB }
+                // expression { return params.PIPELINES_TO_RUN.contains("Docker_DB") }
             }
             steps {
                 script {
@@ -74,7 +79,8 @@ pipeline {
 
         stage("Docker MVC Pipeline") {
             when {
-                expression { return params.PIPELINES_TO_RUN.contains("Docker_MVC") }
+                expression { return params.RUN_DOCKER_MVC }
+                // expression { return params.PIPELINES_TO_RUN.contains("Docker_MVC") }
             }
             steps {
                 script {
