@@ -1,8 +1,9 @@
 pipeline {
     agent any
     parameters {
-        booleanParam(name: 'RUN_DOCKER_MVC', defaultValue: false, description: 'Run Docker MVC Pipeline')
-        booleanParam(name: 'RUN_DOCKER_DB', defaultValue: false, description: 'Run Docker DB Pipeline') // only run the job Docker-DB-Pipeline if this is pressed!
+        booleanParam(name: "RUN_DOCKER_MVC", defaultValue: false, description: "Run Docker MVC Pipeline")
+        booleanParam(name: "RUN_DOCKER_DB", defaultValue: false, description: "Run Docker DB Pipeline") // only run the job Docker-DB-Pipeline if this is pressed!
+        booleanParam(name: "RUN_INFRASTRUCTURE", defaultValue: false, description: "Run Infrastructure")
     }
     environment {
         AWS_ACCESS_KEY_ID = credentials("AWS_ACCESS_KEY_ID")
@@ -116,57 +117,16 @@ pipeline {
                 }
             }
         }
-        stage("Terraform Init") {
-            steps {
-                sh "pwd"
-                sh """
-                pwd
-                cd ~/
-                pwd
-                ls -a
-                """
-                dir("terraform") {
-                    sh "pwd"
-                    sh "terraform init"
-                }
+        stage("Create The Infrastructure") {
+            when {
+                expression { return params.RUN_INFRASTRUCTURE }
             }
-        }
-        stage("Terraform Validate") {
             steps {
-                dir("terraform") {
-                    sh "terraform validate"
-                }
-            }
-        }
-        stage("Terraform Plan") {
-            steps {
-                echo "Looking if plan wille execute"
-                dir("terraform") {
-                    withCredentials([file(credentialsId: 'AWS_PEM_ID', variable: "AWS_KEY_PAIR_FILE")]) {
-                        sh '''
-                            # Ensure the private key file is available
-                            ls -l $AWS_KEY_PAIR_FILE
-
-                            # Run terraform plan with the private key
-                            terraform plan -var="aws_key_pair=${AWS_KEY_PAIR_FILE}"
-                        '''
-                    }
-                }
-            }
-        }
-        stage("Terraform Apply") {
-            steps {
-                echo "About to see if apply works"
-                dir("terraform") {
-                    withCredentials([file(credentialsId: "AWS_PEM_ID", variable: "AWS_KEY_PAIR_FILE")]) {
-                        sh '''
-                            # Ensure the private key file is available
-                            ls -l $AWS_KEY_PAIR_FILE
-
-                            # Run terraform plan with the private key
-                            terraform apply -var="aws_key_pair=${AWS_KEY_PAIR_FILE}" -auto-approve
-                        '''
-                    }
+                script {
+                    echo "Creating the Infrastructure"
+                    build job: "Blog-Infrastructure-Pipeline",
+                        propagate: true,
+                        token: env.REMOTE_TRIGGER_TOKEN
                 }
             }
         }
