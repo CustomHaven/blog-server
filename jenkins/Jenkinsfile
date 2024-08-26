@@ -71,11 +71,13 @@ pipeline {
         }
         stage("Build App") {
             steps {
-                echo "Conterising App Pipeline"
-                build job: "Blog-Build-App-Pipeline",
-                    propagate: true,
-                    wait: false,
-                    // token: env.REMOTE_TRIGGER_TOKEN
+                script {
+                    echo "Conterising App Pipeline"
+                    build job: "Blog-Build-App-Pipeline",
+                        propagate: true,
+                        wait: false,
+                        token: env.REMOTE_TRIGGER_TOKEN
+                }
             }
         }
         stage("Run Docker DB Pipeline") {
