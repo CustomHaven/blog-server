@@ -20,16 +20,6 @@ provider "aws" {
     region = "eu-west-2"
 }
 
-terraform {
-    backend "s3" {
-        bucket         = "s3-bucket-blog-mvc-customhaven"  # The bucket created in backend-state/main.tf
-        key            = "terraform/state/terraform.tfstate"
-        region         = "eu-west-2"
-        dynamodb_table = "terraform-state-lock"  # The DynamoDB table created in backend-state/main.tf
-        encrypt        = true
-    }
-}
-
 resource "aws_instance" "http_server" {
     ami = "ami-0c0493bbac867d427"
     key_name = "default-ec2"
