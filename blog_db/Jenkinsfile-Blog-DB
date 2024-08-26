@@ -9,6 +9,7 @@ pipeline {
                         sh """
                         ls
                         pwd
+                        cd blog_db
 
                         set -a
                         . \$ENV_FILE_DB
@@ -29,9 +30,11 @@ pipeline {
         stage("Push Docker DB Image") {
             steps {
                 script {
-                    docker.withRegistry("", "dockerhub") {
-                        // using the env
-                        sh "docker push ${env.DOCKER_IMAGE_DB}"
+                    dir("blog_db") {
+                        docker.withRegistry("", "dockerhub") {
+                            // using the env
+                            sh "docker push ${env.DOCKER_IMAGE_DB}"
+                        }
                     }
                 }
             }
