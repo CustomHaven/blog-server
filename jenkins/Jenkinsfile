@@ -81,7 +81,11 @@ pipeline {
                         cd blog_db
                         ls
                     """
-                    load "./blog_db/Jenkinsfile-Blog-DB"
+                    dir("blog_db") {
+                        script {
+                            load "Jenkinsfile-Blog-DB"
+                        }
+                    }
                 }
             }
         }
@@ -100,7 +104,11 @@ pipeline {
                         cd blog_mvc
                         ls
                     """
-                    load "./blog_mvc/Jenkinsfile-Blog-MVC"
+                    dir("blog_mvc") {
+                        script {
+                            load "Jenkinsfile-Blog-MVC"
+                        }
+                    }
                 }
             }
         }
