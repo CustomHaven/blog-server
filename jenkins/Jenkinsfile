@@ -68,7 +68,7 @@ pipeline {
             }
             steps {
                 script {
-                    load "../blog_db/Jenkinsfile-Blog-DB"
+                    load "blog_db/Jenkinsfile-Blog-DB"
                 }
             }
         }
@@ -80,7 +80,7 @@ pipeline {
             }
             steps {
                 script {
-                    load "../blog_mvc/Jenkinsfile-Blog-MVC"
+                    load "blog_mvc/Jenkinsfile-Blog-MVC"
                 }
             }
         }
