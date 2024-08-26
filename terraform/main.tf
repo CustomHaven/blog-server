@@ -32,4 +32,4 @@ output "dns_public_ips" {
     value = aws_instance.http_server[*].public_ip
 }
 
-# 13.40.43.201
+# 13.40.43.201  
