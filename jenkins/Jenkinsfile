@@ -69,14 +69,23 @@ pipeline {
 				}
 			}
         }
-        stage('Run Docker DB Pipeline') {
+        stage("Build App") {
+            steps {
+                echo "Conterising App Pipeline"
+                build job: "Blog-Build-App-Pipeline",
+                    propagate: true,
+                    wait: false,
+                    token: env.REMOTE_TRIGGER_TOKEN
+            }
+        }
+        stage("Run Docker DB Pipeline") {
             when {
                 expression { return params.RUN_DOCKER_DB } // only run when it has been pressed dont want SCM for this
             }
             steps {
                 script {
                     echo "Triggering Docker DB Pipeline"
-                    build job: 'Docker-DB-Pipeline', 
+                    build job: "Blog-DB-Microservice-Pipeline", 
                         propagate: true, 
                         wait: false,  // Set to false to not wait for completion, remove if you need to wait
                         token: env.REMOTE_TRIGGER_TOKEN
@@ -94,21 +103,14 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Looking if MVC pipeline is there"
-                    sh """
-                        pwd
-                        ls
-                        cd blog_mvc
-                        ls
-                    """
-                    // dir("blog_mvc") {
-                        // script {
-                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_mvc/Jenkinsfile").text
-                    echo "About to load the Jenkinsfile-Blog-MVC"
-                    load "blog_mvc/Jenkinsfile-Blog-MVC"
-                    echo "Finished loading the Jenkinsfile-Blog-MVC"
-                        // }
-                    // }
+                    echo "Triggering Docker MVC Pipeline"
+                    build job: "Blog-MVC-Microservice-Pipeline", 
+                        propagate: true, 
+                        wait: false,  // Set to false to not wait for completion, remove if you need to wait
+                        token: env.REMOTE_TRIGGER_TOKEN
+
+                        // Use the following URL to trigger build remotely: JENKINS_URL/job/Docker-DB-Pipeline/build?token=TOKEN_NAME or /buildWithParameters?token=TOKEN_NAME
+                        // Optionally append &cause=Cause+Text to provide text that will be included in the recorded build cause.
                 }
             }
         }
@@ -170,35 +172,6 @@ pipeline {
     post {
 		always {
 			echo "I always run"
-            echo "Final Cleanups"
-            dir("blog_mvc") {
-                sh "rm -rf node_modules"
-                sh "ls > ls.txt"
-                sh "cat ls.txt"
-
-                script {
-                    def testTxtExists = sh(script: "grep 'test.txt' ls.txt", returnStatus: true) == 0
-                    if (testTxtExists) {
-                        sh "cat test.txt"
-                        sh "rm test.txt"
-                    }
-
-
-                    def coverageFileExist = sh(script: "grep 'coverage.txt' ls.txt", returnStatus: true) == 0
-                    if (coverageFileExist) {
-                        sh "cat coverage.txt"
-                        sh "rm coverage.txt"
-                    }
-
-                    def coverageExist = sh(script: "grep 'coverage' ls.txt", returnStatus: true) == 0
-                    if (coverageExist) {
-                        sh "rm -rf coverage"
-                    }
-                }
-                sh "ls"
-                sh "rm ls.txt"
-                sh "ls"
-            }
 		}
 		success {
 			echo "I run when successful"
