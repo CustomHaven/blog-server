@@ -1,3 +1,14 @@
+import hudson.model.*
+import jenkins.model.*
+import hudson.tasks.*
+import hudson.FilePath
+import hudson.util.*
+import jenkins.plugins.publish_over_ssh.*
+import org.jenkinsci.plugins.pipeline.modeldefinition.*
+import org.jenkinsci.plugins.workflow.cps.*
+import org.jenkinsci.plugins.workflow.steps.*
+import org.jenkinsci.plugins.workflow.job.*
+
 def runDockerDBPipeline() {
     return {
         pipeline {
