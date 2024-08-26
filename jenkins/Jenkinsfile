@@ -32,10 +32,6 @@ pipeline {
                     cd blog_db
                     ls
                 """
-                echo "AWS_SECRET_ACCESS_KEY is set"
-                sh "echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
-                echo "AWS_ACCESS_KEY_ID"
-                sh "echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
                 echo "Check if Groovy is installed!"
                 sh "groovy --version"
                 echo "Docker Home"
@@ -76,6 +72,14 @@ pipeline {
             }
             steps {
                 script {
+                    echo "Locate the DB"
+                    sh """
+                        pwd
+                        ls
+                        cd blog_db
+                        pwd
+                        ls
+                    """
                     def dbPipeline = load "blog_db/Jenkinsfile-Blog-DB.groovy"
                     dbPipeline.buildDockerDbImage()
                     dbPipeline.pushDockerDbImage()
