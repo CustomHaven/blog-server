@@ -32,8 +32,10 @@ pipeline {
                     cd blog_db
                     ls
                 """
-                echo "Check if Groovy is installed!"
-                sh "groovy --version"
+                echo "AWS_SECRET_ACCESS_KEY is set"
+                sh "echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+                echo "AWS_ACCESS_KEY_ID"
+                sh "echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
                 echo "Docker Home"
                 sh "docker --version"
                 echo "We have node"
@@ -72,34 +74,43 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Locate the DB"
+                    echo "Looking if DB pipeline is there"
                     sh """
                         pwd
                         ls
                         cd blog_db
-                        pwd
                         ls
                     """
-                    def dbPipeline = load "blog_db/Jenkinsfile-Blog-DB.groovy"
-                    echo "Loaded object: ${dbPipeline}"
-                    echo "Methods available: ${dbPipeline.getClass().methods*.name}"
-                    dbPipeline.buildDockerDbImage()
-                    dbPipeline.pushDockerDbImage()
+                    echo "About to load the Jenkinsfile-Blog-DB"
+                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_db/Jenkinsfile").text
+                    load "blog_db/Jenkinsfile"
+                    echo "Finished loading the Jenkinsfile-Blog-DB"
                 }
             }
         }
+
         stage("Docker MVC Pipeline") {
             when {
                 expression { return params.RUN_DOCKER_MVC }
+                // expression { return params.PIPELINES_TO_RUN.contains("Docker_MVC") }
             }
             steps {
                 script {
-                    def mvcPipeline = load "blog_mvc/Jenkins-Blog-MVC.groovy"
-                    mvcPipeline.buildApp()
-                    mvcPipeline.testApp()
-                    mvcPipeline.appTestCoverage()
-                    mvcPipeline.buildDockerMvcImage()
-                    mvcPipeline.pushDockerMvcImage()
+                    echo "Looking if MVC pipeline is there"
+                    sh """
+                        pwd
+                        ls
+                        cd blog_mvc
+                        ls
+                    """
+                    // dir("blog_mvc") {
+                        // script {
+                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_mvc/Jenkinsfile").text
+                    echo "About to load the Jenkinsfile-Blog-MVC"
+                    load "blog_mvc/Jenkinsfile"
+                    echo "Finished loading the Jenkinsfile-Blog-MVC"
+                        // }
+                    // }
                 }
             }
         }
