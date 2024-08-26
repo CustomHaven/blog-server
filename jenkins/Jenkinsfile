@@ -81,6 +81,8 @@ pipeline {
                         ls
                     """
                     def dbPipeline = load "blog_db/Jenkinsfile-Blog-DB.groovy"
+                    echo "Loaded object: ${dbPipeline}"
+                    echo "Methods available: ${dbPipeline.getClass().methods*.name}"
                     dbPipeline.buildDockerDbImage()
                     dbPipeline.pushDockerDbImage()
                 }
