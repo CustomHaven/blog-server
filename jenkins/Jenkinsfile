@@ -74,7 +74,14 @@ pipeline {
             }
             steps {
                 script {
-                    load "blog_db/Jenkinsfile-Blog-DB"
+                    echo "Looking if DB pipeline is there"
+                    sh """
+                        pwd
+                        ls
+                        cd blog_db
+                        ls
+                    """
+                    load "./blog_db/Jenkinsfile-Blog-DB"
                 }
             }
         }
@@ -86,7 +93,14 @@ pipeline {
             }
             steps {
                 script {
-                    load "blog_mvc/Jenkinsfile-Blog-MVC"
+                    echo "Looking if MVC pipeline is there"
+                    sh """
+                        pwd
+                        ls
+                        cd blog_mvc
+                        ls
+                    """
+                    load "./blog_mvc/Jenkinsfile-Blog-MVC"
                 }
             }
         }
