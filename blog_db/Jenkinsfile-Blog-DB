@@ -1,4 +1,4 @@
-{
+stages {
     stage("Build Docker DB Image") {
         steps {
             echo "INSIDE THE DB PIPELINE"
@@ -8,7 +8,7 @@
                         set -a
                         . \$ENV_FILE_DB
                         set +a
-    
+
                         # Build Docker image with environment variables
                         docker build \
                             --build-arg POSTGRES_DB=\$POSTGRES_DB \
