@@ -6,6 +6,7 @@ pipeline {
     stages {
         stage("Build Docker DB Image") {
             steps {
+                echo "INSIDE THE DB PIPELINE"
                 withCredentials([file(credentialsId: "blog_db_env", variable: "ENV_FILE_DB")]) {
                     script {
                             sh """
