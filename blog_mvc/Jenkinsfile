@@ -1,4 +1,11 @@
 node {
+    agent any
+    environment {
+        dockerHome = tool "myDocker"
+		nodeHome = tool "myNodeJS"
+        groovyHome = tool "groovy"
+		PATH = "$dockerHome/bin:$nodeHome/bin:$groovyHome/bin:$PATH"
+    }
     stage("Build App") {
         steps {
             dir("blog_mvc") {
@@ -34,7 +41,7 @@ node {
                 sh "ls"
                 sh "npm --version"
                 echo "Starting Coverage Test Result"
-    
+
                 // Run Jest with coverage and save output to coverage.txt
                 sh "npm run pipeline-coverage"
                 echo "check if coverage is added"
@@ -47,16 +54,16 @@ node {
                         """,
                         returnStdout: true
                     ).trim()
-    
+
                     // Check if the coverage percentage was extracted correctly
                     if (funcsCoveragePercentage == "") {
                         error("Failed to extract functions coverage percentage from coverage.txt")
                     }
-    
+
                     echo "Total Functions Coverage Percentage: ${funcsCoveragePercentage}%"
-    
+
                     sh "ls"
-    
+
                     // Convert to a number and check if it's below 60
                     def coverageValue = funcsCoveragePercentage.toFloat()
                     if (coverageValue < 30) { // change to 60% when I build more tests
@@ -73,17 +80,17 @@ node {
             withCredentials([file(credentialsId: "blog_mvc_env", variable: "ENV_FILE_MVC")]) {
                 echo "Current directory before moving into blog_mvc"
                 sh "pwd"
-    
+
                 echo "Current directory inside blog_mvc"
                 sh "pwd"
                 sh "ls"
-    
+
                 script {
                     sh """
                     set -a
                     . \$ENV_FILE_MVC
                     set +a
-    
+
                     # Build Docker image with environment variables
                     docker build \
                         --build-arg PORT=\$PORT \

@@ -1,4 +1,4 @@
-pipeline {
+node {
     agent any
     parameters {
         booleanParam(name: 'RUN_DOCKER_MVC', defaultValue: false, description: 'Run Docker MVC Pipeline')
@@ -83,7 +83,7 @@ pipeline {
                     """
                     echo "About to load the Jenkinsfile-Blog-DB"
                     // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_db/Jenkinsfile").text
-                    load "blog_db/Jenkinsfile"
+                    load "blog_db/Jenkinsfile-Blog-DB"
                     echo "Finished loading the Jenkinsfile-Blog-DB"
                 }
             }
@@ -107,7 +107,7 @@ pipeline {
                         // script {
                     // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_mvc/Jenkinsfile").text
                     echo "About to load the Jenkinsfile-Blog-MVC"
-                    load "blog_mvc/Jenkinsfile"
+                    load "blog_mvc/Jenkinsfile-Blog-MVC"
                     echo "Finished loading the Jenkinsfile-Blog-MVC"
                         // }
                     // }
