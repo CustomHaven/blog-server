@@ -7,8 +7,8 @@ pipeline {
         AWS_REGION = "eu-west-2"
         dockerHome = tool "myDocker"
 		nodeHome = tool "myNodeJS"
-        groovyHome = tool "groovy"
-		PATH = "$dockerHome/bin:$nodeHome/bin:$groovyHome/bin:$PATH"
+        // groovyHome = tool "groovy"
+		PATH = "$dockerHome/bin:$nodeHome/bin:$PATH"
     }
     parameters {
         activeChoiceReactiveParam("PIPELINES_TO_RUN") {
