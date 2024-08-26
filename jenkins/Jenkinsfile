@@ -68,24 +68,22 @@ node {
 				}
 			}
         }
-        stage("Docker DB Pipeline") {
+        stage('Run Docker DB Pipeline') {
             when {
                 expression { return params.RUN_DOCKER_DB }
             }
             steps {
-                script {
-                    echo "Looking if DB pipeline is there"
-                    sh """
-                        pwd
-                        ls
-                        cd blog_db
-                        ls
-                    """
-                    echo "About to load the Jenkinsfile-Blog-DB"
-                    // evaluate new File("${JENKINS_HOME}/workspace/jenkins-blog-pipeline/blog_db/Jenkinsfile").text
-                    load "blog_db/Jenkinsfile-Blog-DB"
-                    echo "Finished loading the Jenkinsfile-Blog-DB"
+                dir("blog_db") {
+                    script {
+                        def dockerDBPipeline = runDockerDBPipeline()
+                        dockerDBPipeline() // Call the pipeline function
+                    }
                 }
+                
+                // script {
+                //     echo "Triggering Docker DB Pipeline"
+                //     build job: "Docker-DB-Pipeline"
+                // }
             }
         }
 
