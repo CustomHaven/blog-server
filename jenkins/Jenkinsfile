@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         booleanParam(name: 'RUN_DOCKER_MVC', defaultValue: false, description: 'Run Docker MVC Pipeline')
-        booleanParam(name: 'RUN_DOCKER_DB', defaultValue: false, description: 'Run Docker DB Pipeline')
+        booleanParam(name: 'RUN_DOCKER_DB', defaultValue: false, description: 'Run Docker DB Pipeline') // only run the job Docker-DB-Pipeline if this is pressed!
     }
     environment {
         AWS_ACCESS_KEY_ID = credentials("AWS_ACCESS_KEY_ID")
@@ -13,6 +13,7 @@ pipeline {
 		nodeHome = tool "myNodeJS"
         groovyHome = tool "groovy"
 		PATH = "$dockerHome/bin:$nodeHome/bin:$groovyHome/bin:$PATH"
+        REMOTE_TRIGGER_TOKEN = "remote_access_to_pipeline"  // Use the same token
     }
     stages {
         stage("Checkout") {
@@ -70,14 +71,18 @@ pipeline {
         }
         stage('Run Docker DB Pipeline') {
             when {
-                expression { return params.RUN_DOCKER_DB }
+                expression { return params.RUN_DOCKER_DB } // only run when it has been pressed dont want SCM for this
             }
             steps {
-                dir("blog_db") {
-                    script {
-                        echo "Triggering Docker DB Pipeline"
-                        build job: "Docker-DB-Pipeline"
-                    }
+                script {
+                    echo "Triggering Docker DB Pipeline"
+                    build job: 'Docker-DB-Pipeline', 
+                        propagate: true, 
+                        wait: false,  // Set to false to not wait for completion, remove if you need to wait
+                        token: env.REMOTE_TRIGGER_TOKEN
+
+                        // Use the following URL to trigger build remotely: JENKINS_URL/job/Docker-DB-Pipeline/build?token=TOKEN_NAME or /buildWithParameters?token=TOKEN_NAME
+                        // Optionally append &cause=Cause+Text to provide text that will be included in the recorded build cause.
                 }
             }
         }
