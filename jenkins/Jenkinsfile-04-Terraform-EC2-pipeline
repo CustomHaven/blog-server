@@ -48,7 +48,7 @@ pipeline {
                             ls -l $AWS_KEY_PAIR_FILE
                             pwd
 
-                            # Run terraform plan with the private key
+                            echo Run terraform plan with the private key
                             terraform plan -var="aws_key_pair=${AWS_KEY_PAIR_FILE}"
                         '''
                     }
@@ -64,8 +64,22 @@ pipeline {
                         sh '''
                             ls -l $AWS_KEY_PAIR_FILE
 
-                            # Run terraform plan with the private key
-                            terraform apply -var="aws_key_pair=${AWS_KEY_PAIR_FILE}" -auto-approve
+                            echo Run terraform destroy with the private key
+                            terraform destroy -var="aws_key_pair=${AWS_KEY_PAIR_FILE}" -auto-approve
+                        '''
+                    }
+                }
+            }
+        }
+        stage("Terraform Destroy") {
+            steps {
+                echo "Must destroy resources"
+                dir("terraform") {
+                    echo "key to destroy starts here"
+                    withCredentials([file(credentialsId: "AWS_PEM_ID", variable: "AWS_KEY_PAIR_FILE")]) {
+                        sh '''
+                            ls -l $AWS_KEY_PAIR_FILE
+
                         '''
                     }
                 }
