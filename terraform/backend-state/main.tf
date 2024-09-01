@@ -13,6 +13,8 @@ provider "aws" {
 
 resource "aws_s3_bucket" "organisation_backend_state" {
     bucket = "s3-bucket-blog-mvc-customhaven"
+
+    force_destroy = true
 }
 
 resource "aws_s3_bucket_versioning" "bucket_versioning" {
